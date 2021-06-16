@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "bigellor.gen-test-data",
+      "type": "java.lang.Boolean",
+      "description": "Populate exemplary test data at startup such as pre-defined signatures or bigraphs."
+    },
+    {
+      "name": "bigellor.model.storage.location",
+      "type": "java.lang.String",
+      "description": "Specify the upload directory of Bigellor for model files."
+    }
+  ]
+}

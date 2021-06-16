@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+        th:fragment="signature-overview-modal-button">
+    Launch demo modal
+</button>
+
+<a class="dropdown-item" href="#"
+   data-toggle="modal" data-target="#exampleModal"
+   th:fragment="dropdown-item-signature-overview-modal">Signatures</a>
+<!--<div class="btn-group" th:fragment="dropdown-item-signature-overview-modal">-->
+<!--    <button class="dropdown-item" data-toggle="modal" data-target="#exampleModal" href="#">Action</button>-->
+<!--    <button class="btn dropdown-toggle" data-toggle="dropdown">-->
+<!--        <span class="caret"></span>-->
+<!--    </button>-->
+<!--    <ul class="dropdown-menu">-->
+<!--        &lt;!&ndash; dropdown menu links &ndash;&gt;-->
+<!--        <li>sd</li>-->
+<!--        <li>sd</li>-->
+<!--        <li>sd</li>-->
+<!--    </ul>-->
+<!--</div>-->
+
+
+
+<a class="dropdown-item" href="/signatures/add"
+   th:fragment="dropdown-item-add-signature">Add Signature</a>
+
+<!--data-toggle="modal" data-target="#exampleModal"-->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true"
+     th:fragment="signature-overview-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Manage Signatures</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div th:replace="fragments/signature-overview :: signature-overview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" th:fragment="signature-overview-modal-script" th:if="${showManageSignatureForm != null}">
+    // Shorthand for $( document ).ready()
+    $(function () {
+        if ([[${showManageSignatureForm}]] !== undefined) {
+            $('#exampleModal').modal('show');
+        }
+    });
+</script>
+
+</body>
+</html>

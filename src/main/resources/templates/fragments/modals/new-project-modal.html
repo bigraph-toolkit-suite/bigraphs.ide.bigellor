@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<a class="dropdown-item" href="#"
+   data-toggle="modal" data-target="#modal-newProject"
+   th:fragment="new-project-modal-dropdown-item">New ...</a>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-newProject" tabindex="-1" role="dialog" aria-labelledby="modal-newProjectLabel"
+     aria-hidden="true"
+     th:fragment="new-project-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-newProjectLabel">New Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="#" th:action="@{/projects/new}" th:object="${newProjectDTO}"
+                  method="post">
+                <div class="modal-body">
+                    <h3>Name</h3>
+                    <!--                                        <input type="text" th:field="*{name}" th:value="*{name}"/>-->
+                    <label for="projectName">Name</label>
+                    <input type="text" th:field="*{projectName}"
+                           name="projectName"
+                           id="projectName"
+                           placeholder="Name of Project">
+                    <p th:if="${#fields.hasErrors('projectName')}" th:errorclass="error" th:errors="*{projectName}"/>
+                    <!--                    <span th:if="${#fields.hasErrors('projectName')}" th:errors="*{projectName}"></span>-->
+
+                    <!--                <div th:replace="fragments/signature-overview :: signature-overview"></div>-->
+                    <h3>Select Signature</h3>
+                    <!--                <div class="btn-group btn-group-toggle" data-toggle="buttons">-->
+                    <!--                    <label class="btn btn-primary active">-->
+                    <!--                        <input type="checkbox" name="options" id="option1" autocomplete="off" checked> Active-->
+                    <!--                    </label>-->
+                    <!-- -->
+                    <!--                    <label class="btn btn-primary">-->
+                    <!--                        <input type="checkbox" name="options" id="option3" autocomplete="off"> Checkbox-->
+                    <!--                    </label>-->
+                    <!--                </div>-->
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Select</th>
+                        </tr>
+                        </thead>
+                        <tbody th:unless="${#lists.isEmpty(signatures)}">
+                        <tr th:each="sig : ${signatures}">
+                            <th th:text="${sig.id}" scope="row">-1</th>
+                            <td th:text="${sig.name}"></td>
+                            <td>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-primary">
+                                        <input type="checkbox"
+                                               th:name="optionSig"
+                                               th:value="${sig.id}"
+                                               th:id="'optionSig' + ${sig.id}"
+                                               autocomplete="off"> Select
+                                    </label>
+                                    <!--                                    <input type="hidden" th:value="${sig.id}" th:attr="name='optionSig'" />-->
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <span th:text="${sigNotSelectedError}"></span>
+                    <!--                    <div th:if="${sigNotSelectedError != null}">-->
+                    <!--                        <p th:errorclass="error" th:errors="${sigNotSelectedError}"/>-->
+                    <!--                    </div>-->
+<!--                    <ul>-->
+<!--                        <th:block th:each="eachSig : ${signatures}">-->
+<!--                            <li th:text="${eachSig.id}"></li>-->
+<!--                        </th:block>-->
+<!--                    </ul>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                    <button class="btn btn-secondary btn-pill" type="submit">
+                        <i class="fa fa-download mr-2"></i>
+                        Next
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" th:fragment="newProject-modal-script" th:if="${showProjectForm != null}">
+    // Shorthand for $( document ).ready()
+    $(function () {
+        console.log("ready 2!");
+        // if([[${showProjectForm}]] === true) {
+        if ([[${showProjectForm}]] !== undefined) {
+            $('#modal-newProject').removeClass("fade");
+            $('#modal-newProject').modal('show');
+            // if (!$('.modal').hasClass('fade')) {
+            //     setTimeout(function () {
+            $('#modal-newProject').addClass('fade');
+            // }, 10);
+            // }
+        }
+        // $('#myModal').on('shown.bs.modal', function () {
+        //     $('#myInput').trigger('focus')
+        // });
+    });
+</script>
+
+</body>
+</html>

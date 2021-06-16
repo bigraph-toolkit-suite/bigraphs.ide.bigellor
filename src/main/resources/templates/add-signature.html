@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="add-signature">
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Signature</h4>
+            <th:block
+                    th:replace="fragments/single-signature-crud-form :: single-signature-crud-form(url=@{/signatures/add}, submitBtnText='Add Signature')"
+                    th:remove="tag">
+            </th:block>
+        </div>
+    </div>
+    
+</div>
+</body>
+</html>

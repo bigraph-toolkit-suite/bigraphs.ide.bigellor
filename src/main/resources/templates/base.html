@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/nav-header :: nav-header"></div>
+
+
+<!-- ${...} : Variable expressions. -->
+<!-- *{...} : Selection expressions. -->
+<!-- #{...} : Message (i18n) expressions. -->
+<!-- @{...} : Link (URL) expressions. -->
+<!-- ~{...} : Fragment expressions. -->
+
+
+
+<div class="container-fluid">
+    <div th:replace="${content} :: ${content}"></div>
+</div>
+
+<!--<div th:replace="fragments/modals/signature-overview-modal :: signature-overview-modal-button"></div>-->
+<div th:replace="fragments/modals/signature-overview-modal :: signature-overview-modal"></div>
+<div th:replace="fragments/modals/new-project-modal :: new-project-modal"></div>
+
+<!-- JS Block -->
+<th:block th:include="fragments/bottom :: bottom"></th:block>
+
+<!--<footer th:replace="fragments/footer :: footer"></footer>-->
+
+</body>
+</html>

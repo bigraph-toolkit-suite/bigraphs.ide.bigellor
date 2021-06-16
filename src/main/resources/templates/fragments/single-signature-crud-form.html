@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div>
+    <!--          th:action="@{/signatures/update/{id}(id=${signatureEntity.id})}"-->
+    <form th:fragment="single-signature-crud-form(url,submitBtnText)"
+          action="#"
+          th:action="${url}"
+          th:object="${signatureEntity}"
+          method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="Name">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+        <div th:if="${#lists.isEmpty(signatureEntity.controlEntityList)}">
+            No controls specified so far
+        </div>
+        <div th:each="entry, stat : *{controlEntityList}" class="form-row">
+            <div class="form-group col-md-3">
+                <label th:for="${entry.ctrlLbl}" th:text="Label"></label>
+                <input type="text"
+                       class="form-control"
+                       th:field="*{controlEntityList[__${stat.index}__].ctrlLbl}"
+                       th:value="${entry.ctrlLbl}"/>
+            </div>
+            <div class="form-group col-md-3">
+                <label th:for="${entry.portCnt}" th:text="Ports"></label>
+                <input type="text"
+                       class="form-control"
+                       th:field="*{controlEntityList[__${stat.index}__].portCnt}"
+                       th:value="${entry.portCnt}"/>
+            </div>
+            <div class="form-group col-md-3">
+                <label th:for="*{controlEntityList[__${stat.index}__].status}" th:text="Status"></label>
+                <select th:field="*{controlEntityList[__${stat.index}__].status}"
+                        class="form-control custom-select">
+                    <option th:each="type : ${allTypes}"
+                            th:value="${type}"
+                            th:text="${type}">Wireframe
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <br/>
+                <button type="submit"
+                        class="btn btn-warning btn-pill"
+                        name="remove-control"
+                        th:value="${stat.index}"
+                >Remove row
+                </button>
+            </div>
+        </div>
+        <button type="submit"
+                class="btn btn-success btn-pill"
+                th:text="${submitBtnText}"
+        >
+
+        </button>
+        <button type="submit" name="add-control-field"
+                class="btn btn-secondary btn-pill">
+            Add control field
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

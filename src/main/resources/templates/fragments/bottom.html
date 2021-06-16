@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<th:block th:fragment="bottom">
+    <!--    <script th:src="@{/jquery-3.2.1.slim.min.js}" type="text/javascript"></script>-->
+    <script th:src="@{/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/nouislider/nouislider.min.js}" type="text/javascript"></script>
+    <script th:src="@{/shards/js/shards.min.js}" type="text/javascript"></script>
+    <!--    Custom Scripts-->
+    <div th:replace="fragments/modals/signature-overview-modal :: signature-overview-modal-script"></div>
+    <div th:replace="fragments/modals/new-project-modal :: newProject-modal-script"></div>
+    <!-- per page, template-specific -->
+    <th:block
+            th:if="${auxiliaryTemplateContentBottom != null and #strings.isEmpty(auxiliaryTemplateContentBottom) == false}">
+        <th:block
+                th:replace="~{'' + ${#strings.arraySplit(auxiliaryTemplateContentBottom, '//')[0].trim} + '.html' :: ${#strings.arraySplit(auxiliaryTemplateContentBottom, '//')[1].trim}}">
+        </th:block>
+    </th:block>
+
+    <script>
+        var es;
+        window.addEventListener('load', function () {
+            // console.log("FINISHED LOADING!");
+            es = new EventSource('http://[[${BigellorHostIp}]]:[[${BigellorPort}]]/cdo-server-status-updates.do');
+            var cdoAlertBox = document.getElementById("cdo-server-block");
+            es.addEventListener('message', function (message) {
+                // console.log("MESSAGE EVENT:", message);
+                let cdoStatusResponse = JSON.parse(message.data);
+                let classes = "alert alert-success";
+                if (cdoStatusResponse.upAndRunning === false) {
+                    classes = "alert alert-warning";
+                }
+                cdoAlertBox.className = classes;
+                cdoAlertBox.innerHTML = cdoStatusResponse.message;
+
+            });
+            es.onerror = function (err) {
+                console.error("EventSource failed:", err);
+            };
+        });
+        // window.onbeforeunload = function () { //TODO make a class out of this event source thing: https://mkyong.com/spring-boot/spring-boot-webflux-server-sent-events-example/
+        //     es.stop();
+        // }
+    </script>
+</th:block>
+</body>
+</html>

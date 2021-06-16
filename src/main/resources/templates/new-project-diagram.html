@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<th:block th:fragment="new-project-diagram-script-block-top">
+    <script th:src='@{/diagram/cytoscape.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/d3-dispatch.min.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/d3-quadtree.min.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/d3-force.min.js}' type="text/javascript"></script>
+    <script> window['d3-force'] = d3 </script>
+    <script th:src='@{/diagram/extensions/cytoscape-d3-force.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/layout-base.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/cose-base.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/extensions/cytoscape-fcose.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/extensions/cytoscape-no-overlap.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/cytoscape-automove.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/lodash.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/extensions/cytoscape-edgehandles.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/layout.js}' type="text/javascript"></script>
+    <script th:src='@{/diagram/extensions/cytoscape-graphml.js}'></script>
+
+    <style>
+        #cy-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            /*display: block;*/
+            top: 0;
+            left: 0;
+        }
+
+        .sidebar {
+            /*background-color: #f5f5f5;*/
+            /*padding-right: 20px;*/
+            /*padding-top: 20px;*/
+            min-height: 100%;
+            /*display: inline-block;*/
+            vertical-align: top;
+            /*height: calc(100vh);*/
+            /*width: 18%;*/
+            overflow-y: scroll;
+        }
+    </style>
+</th:block>
+
+<!--https://stackoverflow.com/questions/40497288/how-to-create-a-fixed-sidebar-layout-with-bootstrap-4-->
+<div th:fragment="new-project-diagram">
+    <div class="row py-3" style="min-height: calc(100vh - 100px);">
+        <div class="col-3 order-2">
+            <div class="sticky-top">
+                <fieldset class="form-group p-2" style="border: none; border-left: 1px solid #e9ecef;">
+                    <legend class="w-auto">Project Details</legend>
+                    <div class="row">
+                        <div class="col"><span><strong>Name</strong></span></div>
+                        <div class="col"><span th:text="${newProjectDTO.projectName}">undefined</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span>Created</span></div>
+                        <div class="col"><span th:text="${newProjectDTO.createdDate}">undefined</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span>Signature</span></div>
+                        <div class="col"><span
+                                th:text="${currentSignatureEntity.name} + ' (id=' + ${newProjectDTO.sigId} + ')'">undefined</span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="p-2" style="border: none; border-left: 1px solid #e9ecef;">
+                    <legend class="w-auto">Diagram</legend>
+                    <div class="form-group">
+                        <label for="shards-custom-slider" th:text="Zoom"></label>
+                        <div id="shards-custom-slider" style="min-width: 300px;">
+                            <input type="hidden" class='custom-slider-input form-control-sm'
+                                   name="custom-slider-value">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="p-2" style="border: none; border-left: 1px solid #e9ecef;">
+                    <legend class="w-auto">Controls</legend>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Ports</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody th:if="${#lists.isEmpty(currentSignatureEntity.controlEntityList)}">
+                        <tr>
+                            <td colspan=3>No controls specified yet for this signature</td>
+                        </tr>
+                        </tbody>
+                        <tbody th:unless="${#lists.isEmpty(currentSignatureEntity.controlEntityList)}">
+                        <!--                        <div class="btn-group btn-group-toggle" data-toggle="buttons">-->
+                        <!--                            <label class="btn btn-primary">-->
+                        <!--                                <input type="checkbox"-->
+                        <!--                                       th:name="optionSig"-->
+                        <!--                                       th:value="${sig.id}"-->
+                        <!--                                       th:id="'optionSig' + ${sig.id}"-->
+                        <!--                                       autocomplete="off"> Select-->
+                        <!--                            </label>-->
+                        <!--                        </div>-->
+
+                        <tr
+                                th:each="entry, stat : ${currentSignatureEntity.controlEntityList}">
+                            <td class="">
+                                <label th:class="${stat.index eq 0} ? 'btn btn-primary w-100' : 'btn btn-primary w-100'"
+                                       th:for="'option' + ${stat.index}">
+                                    <input type="radio"
+                                           th:name="btnGroup-SignatureControls"
+                                           th:value="${entry.ctrlLbl}"
+                                           th:id="'option' + ${stat.index}"
+                                           th:attr="data-ports=${entry.portCnt},data-status=${entry.status}"
+                                           autocomplete="off"
+                                    >
+                                    <span
+                                            class=""
+                                            th:text="${entry.ctrlLbl}"></span>
+                                </label>
+                            </td>
+                            <td class="" th:text="${entry.portCnt}">
+                            </td>
+                            <td class="" th:text="${entry.status}">
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </fieldset>
+
+            </div>
+        </div>
+        <div class="col" id="main" style="position: relative;">
+            <div id="cy-container"></div>
+            <script th:src="@{/bigraph/code.js}" type="module"></script>
+        </div>
+    </div>
+
+    <div class="modal fade" id="model-load-bigraph-from-filesystem" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Manage Models</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--                    Hier gibt es einen upload bereich und eine filesystem anzeige die direkt aus dem download dir liest-->
+                    <h5>Upload Model File</h5>
+                    <form enctype="multipart/form-data" method="POST" th:action="@{/upload/model/bigraph}"
+                          id="form-upload-single-model">
+                        <div class="form-group">
+                            <label for="model-file-upload">Select Model</label>
+                            <input id="model-file-upload" class="form-control form-control-file" type="file"
+                                   name="file">
+                            <progress></progress>
+                        </div>
+                        <input id="submit-upload-single-model-form" type="button" value="Upload"
+                               class="btn btn-success"
+                        />
+                    </form>
+
+                    <h5>All Uploaded Files:</h5>
+                    <ul>
+                        <li th:each="entry, stat : ${files}">
+                            <a th:href="${entry.downloadUrl}" target="_blank" th:text="${entry.fileName}"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="model-export-bigraph-to-filesystem" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Manage Signatures</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:fragment="new-project-diagram-script-bottom">
+    <script type="text/javascript">
+        (function () {
+            // var currentElementsBigraph = '[[${currentElementsBigraph}]]';
+            var currentElementsBigraph = $('<div>').html('[[${currentElementsBigraph}]]')[0].textContent;
+            (async () => {
+                console.log("waiting for variable");
+                while (!window.hasOwnProperty("singleA")) // define the condition as you like
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                console.log("init cytoscape with currentElementsBigraph", JSON.parse(currentElementsBigraph), typeof JSON.parse(currentElementsBigraph));
+                var cy = window.cy = singleA.initCytoscape(JSON.parse(currentElementsBigraph));
+                singleA.initEvents();
+                renderAll();
+                initSidebarControls(cy);
+            })();
+            // if (currentElementsBigraph === undefined) {
+            //     console.log("currentElementsBigraph is UNDEFINED", currentElementsBigraph);
+            // } else {
+            //     console.log("currentElementsBigraph is defined", currentElementsBigraph, typeof currentElementsBigraph);
+            // }
+
+            var slider;
+            $('#navbarDropdown-edit-fitview').click(function () {
+                cy.resize();
+                cy.fit();
+                cy.center();
+            });
+
+            $('#navbarDropdown-edit-only-centerview').click(function () {
+                cy.center();
+            });
+
+            //see https://stackoverflow.com/questions/4545311/download-a-file-by-jquery-ajax
+            function ajax_download(url, data, input_name) {
+                var $iframe,
+                    iframe_doc,
+                    iframe_html;
+
+                if (($iframe = $('#download_iframe')).length === 0) {
+                    $iframe = $("<iframe id='download_iframe'" +
+                        " style='display: none' src='about:blank'></iframe>"
+                    ).appendTo("body");
+                }
+
+                iframe_doc = $iframe[0].contentWindow || $iframe[0].contentDocument;
+                if (iframe_doc.document) {
+                    iframe_doc = iframe_doc.document;
+                }
+                // JSON.stringify(data)
+                iframe_html = "<html><head></head><body><form method='get' action='" +
+                    url + "'>" +
+                    "<input type=hidden name='" + input_name + "' value='" +
+                    data + "'/></form>" +
+                    "</body></html>";
+                console.info("iframe_html", iframe_html)
+
+                iframe_doc.open();
+                iframe_doc.write(iframe_html);
+                $(iframe_doc).find('form').submit();
+            }
+
+            function zoomTo(level) {
+                cy.zoom({
+                    level: level
+                    // renderedPosition: { x: zx, y: zy }
+                });
+            }
+
+            function handleWheelCytoZoom() {
+                slider.noUiSlider.set(cy.zoom());
+            }
+
+            function sliderUpdateHandler(values, handle, unencoded, tap, positions, noUiSlider) {
+                var zmin = cy.minZoom();
+                var zmax = cy.maxZoom();
+                // console.log("z", values[0]);
+                var z = parseFloat(values[0]);
+                if (z < zmin) {
+                    z = zmin;
+                } else if (z > zmax) {
+                    z = zmax;
+                }
+                zoomTo(z);
+            }
+
+
+            function initSidebarControls(cy) {
+                var zl = cy.zoom();
+                // console.log("zoom level", zl);
+                slider = document.getElementById('shards-custom-slider');
+                noUiSlider
+                noUiSlider.create(slider,
+                    {
+                        start: [zl],
+                        tooltips: [true],
+                        range: {
+                            'min': cy.minZoom(),
+                            'max': cy.maxZoom()
+                        },
+                    }
+                );
+                slider.noUiSlider.on("update", sliderUpdateHandler);
+                document.getElementById("cy-container").addEventListener("wheel", handleWheelCytoZoom, true);
+            }
+
+            $("#dropdown-item-save-current-bigraph").click(function (event) {
+                console.log("save current bigraph", event);
+                $.ajax({
+                    type: "GET",
+                    url: "/signatures/convert/[[${currentSignatureEntity.id}]]/json",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                }).then(function (signatureData) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/projects/save/[[${newProjectDTO.newProjectId}]]",
+                        data: JSON.stringify({
+                            controls: signatureData,
+                            graphml: cy.graphml()
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            console.log("after saving post:", data);
+                        },
+                        error: function (err) {
+                            console.log("(error) after saving post:", err);
+                        }
+                    });
+                });
+            });
+
+            $("#dropdown-item-export-current-graph").click(function () {
+                //TODO: Get from RestController with promise
+                var dataBody = JSON.stringify({controls: ["A"]}); //{controls: ["A"]}; //
+                console.log(cy.graphml());
+                dataBody = JSON.stringify(cy.graphml());
+                console.log("dataBody", dataBody);
+
+                $.ajax({
+                    type: "GET",
+                    url: "/signatures/convert/[[${currentSignatureEntity.id}]]/json",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                }).then(function (signatureData) {
+                    // console.log("signatureData", signatureData);
+                    $.ajax({
+                        type: "POST",
+                        url: "/projects/convert/bigraph",
+                        data: JSON.stringify({
+                            controls: signatureData,
+                            graphml: cy.graphml()
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            console.log("after conversion post:", data);
+                            // window.open(<url>, '_blank');
+                            console.log("before ajax_download");
+                            ajax_download('/projects/download/bigraph', data.filename, 'filename');
+                            console.log("after ajax_download");
+                        },
+                        error: function (err) {
+                            console.log("(error) after conversion post:", err);
+                        }
+                    });
+                });
+            });
+
+            // see https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously-with-jquery
+            $('#submit-upload-single-model-form').click(function () {
+                var data = new FormData($('#form-upload-single-model')[0]);
+                console.log("formdata", data)
+                $.ajax({
+                    url: "/upload/model/bigraph/[[${newProjectDTO.newProjectId}]]",
+                    method: "POST",
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        console.log("done", response);
+                        console.log("model uploaded, time to show it in the modal to be selected for the next request");
+                        $.getJSON("/demobigraph", {filename: response.fileName}, function (data) {
+                            console.log("Data was loadedXXX:", data);
+                            cy = window.cy = singleA.initCytoscape(data);
+                            singleA.initEvents();
+                            renderAll();
+                            slider.noUiSlider.updateOptions(
+                                {
+                                    start: [1.0],
+                                },
+                                true // Boolean 'fireSetEvent'
+                            );
+                            document.getElementById("cy-container").removeEventListener("wheel", handleWheelCytoZoom, true);
+                            document.getElementById("cy-container").addEventListener("wheel", function () {
+                                slider.noUiSlider.set(cy.zoom());
+                            });
+                        });
+                        $('#model-load-bigraph-from-filesystem').modal('toggle');
+                    },
+                    xhr: function () {
+                        var myXhr = $.ajaxSettings.xhr();
+                        if (myXhr.upload) {
+                            // For handling the progress of the upload
+                            myXhr.upload.addEventListener('progress', function (e) {
+                                if (e.lengthComputable) {
+                                    $('progress').attr({
+                                        value: e.loaded,
+                                        max: e.total,
+                                    });
+                                }
+                            }, false);
+                        }
+                        return myXhr;
+                    }
+                });
+            });
+
+            // $("input[name='btnGroup-SignatureControls']").click(function (event) {
+            //     let isChecked = $(event.target).prop('checked');
+            //     console.log("sdksjds", isChecked);
+            //     if (isChecked) {
+            //
+            //     }
+            // });
+            var currentControlSelection = undefined;
+            $('body').on('click', "input[name='btnGroup-SignatureControls']", function (e) {
+                if (currentControlSelection === $(this)[0].id) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    $(this).removeClass('active');
+                    $("input[name='btnGroup-SignatureControls']").prop('checked', false);
+                    currentControlSelection = undefined
+                    window.selectedControlOutside.reset();
+                }
+            })
+            // Sets the control to use for cytoscape when adding nodes
+            $("input[name='btnGroup-SignatureControls']").change(function (event) {
+                // let isChecked = $(event.target).prop('checked');
+                // console.log("Was checked: ", event.target.id, isChecked);
+                //TODO: use singleA instead
+                window.selectedControlOutside.setValues($(this).val(), $(this).data("ports"), $(this).data("status"))
+                if (currentControlSelection === undefined || currentControlSelection !== event.target.id) {
+                    currentControlSelection = event.target.id;
+                }
+            });
+
+        })();
+    </script>
+
+
+</th:block>
+
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div th:fragment="signature-overview">
+    <!--    <div th:switch="${signatures}">-->
+    <!--        <div th:case="null">No signatures yet!</div>-->
+    <!--        <div th:case="*">-->
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <!--                <th>Port Cnt</th>-->
+            <!--                <th>Map Ctrl</th>-->
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+            <!--                <th>Delete</th>-->
+        </tr>
+        </thead>
+        <tbody th:if="${#lists.isEmpty(signatures)}">
+        <tr>
+            <td colspan=4>No signatures specified yet</td>
+        </tr>
+        </tbody>
+        <tbody th:unless="${#lists.isEmpty(signatures)}">
+        <tr th:each="sig : ${signatures}">
+            <td th:text="${sig.id}" scope="row">-1</td>
+            <td th:text="${sig.name}"></td>
+            <!--                <td th:text="${sig.portCnt}"></td>-->
+            <!--                <td>-->
+            <!--                    <ul>-->
+            <!--                        <li th:each="key: ${sig.ctrlLbls.keySet()}">-->
+            <!--                            <span th:text="${key}"></span> = <span th:text="${map.get(key)}"></span>-->
+            <!--                        </li>-->
+            <!--                    </ul>-->
+            <!--                </td>-->
+            <td><a th:href="@{/signatures/edit/{id}(id=${sig.id})}">Edit</a></td>
+            <td><a th:href="@{/signatures/delete/{id}(id=${sig.id})}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <!--</div>-->
+    <!--    </div>-->
+    <!--<p><a class="btn btn-primary btn-pill" href="/signup">Add a new user</a></p>-->
+    <a class="btn btn-primary btn-pill" href="/signatures/add">
+        Add a new signature
+    </a>
+</div>
+
+</body>
+</html>
