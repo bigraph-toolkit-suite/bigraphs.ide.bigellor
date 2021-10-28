@@ -1,9 +1,9 @@
 # Bigellor
 
-Branch Status | Current Version |
----|---|
-Master: [![pipeline status](/../badges/master/pipeline.svg)](/../pipelines) | N.A. |
-Develop: [![pipeline status](/../badges/develop/pipeline.svg)](/../pipelines) | 0.0.1-SNAPSHOT |
+Branch | Status | Current Version |
+---|---|---|
+Master | [![pipeline status](/../badges/master/pipeline.svg)](/../pipelines) | N.A. |
+Develop| [![pipeline status](/../badges/develop/pipeline.svg)](/../pipelines) | 0.0.1-SNAPSHOT |
 -----
 
 **Bigellor** is a web-based modelling tool to graphically create and visualize bigraphs.
@@ -31,7 +31,7 @@ After the command successfully finishes, the compiled application is located in 
 
 > **Note:** Ensure that there is read/write permission on the directory, where Bigellor is started.
 
-After the [above command](#Building-from-Source) successfully finished, you can start using **Bigellor**.
+After the [above command](#building-from-source) successfully finished, you can start using **Bigellor**.
 
 Therefore, execute the following command:
 ```bash
