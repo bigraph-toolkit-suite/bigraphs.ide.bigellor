@@ -1,6 +1,6 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 
-import de.tudresden.inf.st.bigraphs.core.BigraphArtifacts;
+import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
 import de.tudresden.inf.st.bigraphs.core.exceptions.InvalidConnectionException;
 import de.tudresden.inf.st.bigraphs.core.exceptions.builder.TypeNotExistsException;
 import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
@@ -84,7 +84,7 @@ public class DemoController extends AbstractController {
             PureBigraph bigraph = converter.convert();
             String filename = "/tmp/instance-model.xmi";
             FileOutputStream fileOutputStream = new FileOutputStream(filename);
-            BigraphArtifacts.exportAsInstanceModel(bigraph, fileOutputStream);
+            BigraphFileModelManagement.Store.exportAsInstanceModel(bigraph, fileOutputStream);
             return new ResponseEntity<>("{\"filename\":\"" + filename + "\"}", new HttpHeaders(), HttpStatus.OK);
 //                    ResponseEntity.ok()
 //                    .contentType(MediaType.valueOf("application/json; charset=utf-8"))

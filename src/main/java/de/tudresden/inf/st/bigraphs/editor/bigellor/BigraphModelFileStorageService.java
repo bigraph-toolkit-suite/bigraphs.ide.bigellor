@@ -1,7 +1,7 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor;
 
 import de.tudresden.inf.st.bigraphs.core.EcoreBigraph;
-import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
+import de.tudresden.inf.st.bigraphs.core.exceptions.EcoreBigraphFileSystemException;
 import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.FileStorageException;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.ModelFileNotFoundException;
@@ -19,11 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
@@ -94,13 +91,13 @@ public class BigraphModelFileStorageService implements ModelStorageService {
      * @return the filename, if the operation was successful
      */
     public String storeModel(PureBigraph bigraph, String fileName) {
-        InputStream inputStreamOfInstanceModel = new EcoreBigraph.Stub<>(bigraph).getInputStreamOfInstanceModel();
         try {
+            InputStream inputStreamOfInstanceModel = new EcoreBigraph.Stub<>(bigraph).getInputStreamOfInstanceModel();
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.bigraphModelStorageLocation.resolve(fileName);
             Files.copy(inputStreamOfInstanceModel, targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
-        } catch (IOException ex) {
+        } catch (IOException | EcoreBigraphFileSystemException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }

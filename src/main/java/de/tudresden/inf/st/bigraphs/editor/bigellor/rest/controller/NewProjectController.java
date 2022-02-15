@@ -1,6 +1,7 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 
-import de.tudresden.inf.st.bigraphs.core.BigraphArtifacts;
+import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
+import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement.*;
 import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
 import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraphBuilder;
@@ -177,7 +178,7 @@ public class NewProjectController extends AbstractController {
             PureBigraph loadedBigraph = defaultDynamicSignaturePureBigraphBuilder.createBigraph();
             BBigraph2CytoscapeJSON ecore2JSON = new BBigraph2CytoscapeJSON();
             try {
-                BigraphArtifacts.exportAsInstanceModel(loadedBigraph, System.out);
+                BigraphFileModelManagement.Store.exportAsInstanceModel(loadedBigraph, System.out);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -228,7 +229,7 @@ public class NewProjectController extends AbstractController {
         try {
             CytoscapeJSON2BBigraph converter = new CytoscapeJSON2BBigraph(bigraphJsonModel);
             PureBigraph bigraph = converter.convert();
-            BigraphArtifacts.exportAsInstanceModel(bigraph, System.out);
+            BigraphFileModelManagement.Store.exportAsInstanceModel(bigraph, System.out);
             NewProjectDTO newProjectDTO = newProjectDTORepository.findById(newProjId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid project id:" + newProjId));
             ModelStorageEntity modelStorageEntity = modelStorageRepository.findById(newProjectDTO.getModelStorageEntityId())

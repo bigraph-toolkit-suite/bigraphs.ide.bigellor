@@ -5,22 +5,21 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.1</version>
+        <version>2.6.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>de.tudresden.inf.st.bigraphs.editor</groupId>
     <artifactId>bigellor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>bigellor</name>
-    <description>Demo project for Spring Boot</description>
+    <description>A simple visual editor for bigraph modelling purposes</description>
 
     <properties>
-        <!--        <java.version>1.8</java.version>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
-        <bigraph.version>0.9.5-SNAPSHOT</bigraph.version>
+        <bigraph.version>0.9.6-SNAPSHOT</bigraph.version>
         <spring.data.cdo.version>0.5.0-SNAPSHOT</spring.data.cdo.version>
     </properties>
 
@@ -55,16 +54,16 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.eclipse.platform</groupId>-->
-        <!--            <artifactId>org.eclipse.equinox.common</artifactId>-->
-        <!--            <version>3.14.100</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.eclipse.platform</groupId>-->
-        <!--            <artifactId>org.eclipse.core.runtime</artifactId>-->
-        <!--            <version>3.14.0</version>-->
-        <!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.eclipse.platform</groupId>-->
+<!--            <artifactId>org.eclipse.equinox.common</artifactId>-->
+<!--            <version>3.15.100</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.eclipse.platform</groupId>-->
+<!--            <artifactId>org.eclipse.core.runtime</artifactId>-->
+<!--            <version>3.24.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>de.tudresden.inf.st.bigraphs</groupId>
             <artifactId>bigraph-core</artifactId>
@@ -95,12 +94,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-cdo</artifactId>
-            <!--            <exclusions>-->
-            <!--                <exclusion>-->
-            <!--                    <groupId>org.eclipse.platform</groupId>-->
-            <!--                    <artifactId>org.eclipse.core.runtime</artifactId>-->
-            <!--                </exclusion>-->
-            <!--            </exclusions>-->
         </dependency>
 
         <dependency>
@@ -199,7 +192,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>30.1.1-jre</version>
+                <version>31.0.1-jre</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -230,16 +223,6 @@
     </build>
 
     <repositories>
-        <!--        <repository>-->
-        <!--            <id>repository.spring.snapshot</id>-->
-        <!--            <name>Spring Snapshot Repository</name>-->
-        <!--            <url>http://repo.spring.io/snapshot</url>-->
-        <!--        </repository>-->
-        <!--        <repository>-->
-        <!--            <id>repository.spring.release</id>-->
-        <!--            <name>Spring GA Repository</name>-->
-        <!--            <url>http://repo.spring.io/release</url>-->
-        <!--        </repository>-->
         <repository>
             <snapshots>
                 <enabled>true</enabled>
