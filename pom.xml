@@ -19,8 +19,10 @@
         <java.version>11</java.version>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
+        <!-- Versions -->
         <bigraph.version>0.9.6-SNAPSHOT</bigraph.version>
         <spring.data.cdo.version>0.5.0-SNAPSHOT</spring.data.cdo.version>
+        <equinox.app.version>1.6.100</equinox.app.version>
     </properties>
 
     <dependencies>
@@ -54,15 +56,20 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.app</artifactId>
+            <version>${equinox.app.version}</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.eclipse.platform</groupId>-->
 <!--            <artifactId>org.eclipse.equinox.common</artifactId>-->
-<!--            <version>3.15.100</version>-->
+<!--            <version>3.16.100</version>-->
 <!--        </dependency>-->
 <!--        <dependency>-->
 <!--            <groupId>org.eclipse.platform</groupId>-->
 <!--            <artifactId>org.eclipse.core.runtime</artifactId>-->
-<!--            <version>3.24.0</version>-->
+<!--            <version>3.25.0</version>-->
 <!--        </dependency>-->
         <dependency>
             <groupId>de.tudresden.inf.st.bigraphs</groupId>
@@ -230,6 +237,28 @@
             <id>STFactory</id>
             <name>st-tu-dresden-artifactory</name>
             <url>https://stgroup.jfrog.io/artifactory/st-tu-dresden-maven-repository/</url>
+        </repository>
+        <!-- p2 repositories -->
+        <!-- https://www.eclipse.org/Xtext/documentation/350_continuous_integration.html#maven-tycho-hints -->
+        <repository>
+            <id>Xtext</id>
+            <url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.27.0/</url>
+            <layout>p2</layout>
+        </repository>
+        <repository>
+            <id>EMF</id>
+            <url>http://download.eclipse.org/modeling/emf/emf/builds/release/2.30</url>
+            <layout>p2</layout>
+        </repository>
+        <repository>
+            <id>MWE2MWE</id>
+            <url>http://download.eclipse.org/modeling/emft/mwe/updates/releases/2.13.0/</url>
+            <layout>p2</layout>
+        </repository>
+        <repository>
+            <id>Eclipse</id>
+            <url>http://download.eclipse.org/releases/2022-06</url>
+            <layout>p2</layout>
         </repository>
     </repositories>
 
