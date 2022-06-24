@@ -170,7 +170,7 @@ var mySingleton = (function () {
                             selector: '.outer-name',
                             css: {
                                 'border-width': 2,
-                                'label': (node) => node.data('id').substr(1),
+                                'label': "data(name)", // 'label': (node) => node.data('id').substr(1),
                                 'font-style': 'italic',
                                 'text-valign': 'center',
                                 'text-halign': 'center',
@@ -184,7 +184,7 @@ var mySingleton = (function () {
                             selector: '.inner-name',
                             css: {
                                 'border-width': 2,
-                                'label': (node) => node.data('id').substr(1),
+                                'label': "data(name)", // 'label': (node) => node.data('id').substr(1),
                                 'font-style': 'italic',
                                 'text-valign': 'center',
                                 'text-halign': 'center',
@@ -236,7 +236,7 @@ var mySingleton = (function () {
                             selector: '.node',
                             css: {
                                 //'shape': 'round-rectangle',
-                                'label': (node) => node.data('ctrlLabel') + ':' + node.data('id'), //TODO 'data(id)', //
+                                'label': (node) => node.data('ctrlLabel') + ':' + node.data('id'),
                                 'border-width': 1,
                                 'background-color': 'white',
                                 'border-color': 'black',
@@ -523,13 +523,7 @@ var mySingleton = (function () {
                         console.log("rpos: ", rpos);
 
                         var target = evt.target
-                        // cy.add({
-                        //         group: 'nodes',
-                        //         data: {id: name_counter++, parent: target.id()},
-                        //         renderedPosition: rpos,
-                        //         classes: ['node']
-                        //     }
-                        // )
+
                         if (!selectedControlOutside.isUndefined()) { //NEW
                             // let oldCnt = name_counter;
                             var new_index = Math.max(...cy.$('.node').map(e => e.data('id').substr(1)).concat(['0'])) + 1
@@ -548,13 +542,11 @@ var mySingleton = (function () {
                     }
                 );
 
-                // insert region when double clicking on the visual compound node containing
-                // all the regions
+                // Insert region when double clicking on the visual compound node containing all the regions
                 cy.on('doubleTap', '#regions',
                     function (evt, rpos) {
                         console.debug("creating new region…")
                         var new_index = Math.max(...cy.$('.region').map(e => e.data('index')).concat(['0'])) + 1
-                        // console.debug(",,,,")
                         console.debug("max is: ", new_index)
                         cy.add({
                             group: 'nodes',
@@ -579,6 +571,39 @@ var mySingleton = (function () {
                         cy.add(createInnerName(createRandomString(), rpos))
                     }
                 )
+                cy.on('doubleTap', '.outer-name, .inner-name',
+                    function (evt, rpos) {
+                        var target = evt.target
+                        // if (selected.length !== 0) {
+                        console.log("double tap on outer or inner name...", evt)
+                        var selected = cy.$(':selected')
+                        $('#modal-changeLinkLabel #formControlInputLinkLabel').val(target.data("name"))
+                        $("#formControlInputLinkLabelSaveChanges").click(function () {
+                            var field1value = $("#formControlInputLinkLabel").val()
+                            console.log("Modal submitted with text: ", field1value);
+                            var prefix = "o";
+                            if (target.classes().includes("outer-name")) {
+                                prefix = "o";
+                            } else if (target.classes().includes("inner-name")) {
+                                prefix = "i";
+                            }
+                            target.data("name", field1value)
+                            // target.data("label", field1value)
+                            // target.data("id", prefix + field1value)
+                            console.log("target", target)
+                            // selected.data("name", field1value)
+                            // selected.data("id", prefix + field1value)
+                            $('#modal-changeLinkLabel').modal('hide');
+                            // cy.resize();
+                            // cy.fit();
+                            cy.autounselectify(true)
+                            // selected.removeClass('outer-name').addClass('outer-name')
+                            $("#formControlInputLinkLabelSaveChanges").unbind("click")
+                        });
+                        $('#modal-changeLinkLabel').modal('show');
+                        // }
+                    });
+
                 // createRandomString
 
                 eh = cy.edgehandles({
@@ -677,7 +702,8 @@ var mySingleton = (function () {
             },
         };
 
-    };
+    }
+
     return {
         getInstance: function (param_elements = undefined) {
             if (!instance) {

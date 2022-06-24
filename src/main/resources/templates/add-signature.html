@@ -8,11 +8,11 @@
 
 <div th:fragment="add-signature">
 
-    <div class="card">
+    <div class="card mt-5">
         <div class="card-body">
             <h4 class="card-title">Create Signature</h4>
             <th:block
-                    th:replace="fragments/single-signature-crud-form :: single-signature-crud-form(url=@{/signatures/add}, submitBtnText='Add Signature')"
+                    th:replace="fragments/signature/single-signature-crud-form :: single-signature-crud-form(url=@{/signatures/add}, submitBtnText='Add Signature')"
                     th:remove="tag">
             </th:block>
         </div>

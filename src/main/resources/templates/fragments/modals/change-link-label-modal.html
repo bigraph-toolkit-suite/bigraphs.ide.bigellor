@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<!--<a class="dropdown-item" href="#"-->
+<!--   data-toggle="modal" data-target="#modal-newProject"-->
+<!--   th:fragment="new-project-modal-dropdown-item">New ...</a>-->
+
+<!-- Modal -->
+<div class="modal fade" tabindex="-1"
+     id="modal-changeLinkLabel"
+     role="dialog" aria-labelledby="modal-changeLinkLabelLabel"
+     aria-hidden="true"
+     th:fragment="change-link-label-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-changeLinkLabelLabel">Change Label of Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="formControlInputLinkLabel" class="form-label">Change Label</label>
+                    <input type="text" class="form-control" id="formControlInputLinkLabel" placeholder="">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="formControlInputLinkLabelSaveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--th:if="${showProjectForm != null}"-->
+<script type="text/javascript" th:fragment="change-link-label-modal-script">
+    $(function () {
+        console.log("change-link-label-modal-script ready");
+        // var myModalEl = document.getElementById('modal-changeLinkLabel')
+        // console.log("myModalEl", myModalEl);
+
+        // myModal.show(modalToggle)
+        // var modal = bootstrap.Modal.getInstance(myModalEl) // Returns a Bootstrap modal instance
+        // console.log("modal", modal);
+    });
+</script>
+
+</body>
+</html>

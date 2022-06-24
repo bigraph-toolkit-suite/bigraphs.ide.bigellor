@@ -41,6 +41,7 @@ public class DemoController extends AbstractController {
     BigraphModelFileStorageService bigraphModelFileStorageService;
 
     //TODO add requestparam sig id
+    //TODO change URL demobigraph
     @RequestMapping(value = "/demobigraph", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String getDemoBigraph(@RequestParam(required = false, defaultValue = "", value = "filename") String filename) {
         try {

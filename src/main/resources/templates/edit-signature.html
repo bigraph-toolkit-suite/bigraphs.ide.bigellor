@@ -6,7 +6,7 @@
         <div class="card-body">
             <h4 class="card-title">Edit Signature</h4>
             <th:block
-                    th:replace="fragments/single-signature-crud-form :: single-signature-crud-form(url=@{/signatures/update/{id}(id=${signatureEntity.id})}, submitBtnText='Update Signature')"
+                    th:replace="fragments/signature/single-signature-crud-form :: single-signature-crud-form(url=@{/signatures/update/{id}(id=${signatureEntity.id})}, submitBtnText='Update Signature')"
                     th:remove="tag">
             </th:block>
         </div>

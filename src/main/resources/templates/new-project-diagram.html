@@ -390,8 +390,12 @@
                     success: function (response) {
                         console.log("done", response);
                         console.log("model uploaded, time to show it in the modal to be selected for the next request");
+                        //TODO change URL demobigraph
+                        //TODO add sig id as request param
                         $.getJSON("/demobigraph", {filename: response.fileName}, function (data) {
-                            console.log("Data was loadedXXX:", data);
+                            console.log("Data was loaded:", data);
+
+                            //TODO add this to a facade/service class "init/render new bigraph"
                             cy = window.cy = singleA.initCytoscape(data);
                             singleA.initEvents();
                             renderAll();
@@ -405,6 +409,8 @@
                             document.getElementById("cy-container").addEventListener("wheel", function () {
                                 slider.noUiSlider.set(cy.zoom());
                             });
+                            //TODO add this to a facade/service class "init/render new bigraph"
+
                         });
                         $('#model-load-bigraph-from-filesystem').modal('toggle');
                     },
@@ -458,7 +464,9 @@
         })();
     </script>
 
-
+    <!-- Change Link Label Modal -->
+    <div th:replace="fragments/modals/change-link-label-modal :: change-link-label-modal"></div>
+    <div th:replace="fragments/modals/change-link-label-modal :: change-link-label-modal-script"></div>
 </th:block>
 
 
