@@ -4,6 +4,9 @@ import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.DomainUtils;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.NewProjectDTO;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.NewProjectDTORepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.CDOServerService;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.SignatureFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,9 +20,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class AbstractController {
+
     @Autowired
-    protected SignatureEntityRepository signatureEntityRepository;
+    protected CDOServerService cdoServerService;
     @Autowired
+    protected SignatureFileStorageService signatureService;
+    @Autowired
+    protected ProjectFileLocationService projectFileLocationService;
+
+    @Autowired
+    @Deprecated
     protected NewProjectDTORepository newProjectDTORepository;
     @LocalServerPort
     private String port;
@@ -31,7 +41,7 @@ public abstract class AbstractController {
         if (newProjectDTO.getProjectName() == null || newProjectDTO.getProjectName().isEmpty()) {
             newProjectDTO.setProjectName(DomainUtils.createPlaceholderName());
         }
-        modelAndView.addObject("signatures", signatureEntityRepository.findAll());
+        modelAndView.addObject("signatures", signatureService.findAll());
         modelAndView.addObject("newProjectDTO", newProjectDTO);
         modelAndView.setViewName("base");
     }

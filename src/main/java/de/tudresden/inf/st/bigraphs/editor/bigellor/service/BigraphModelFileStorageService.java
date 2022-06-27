@@ -26,10 +26,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
-public class BigraphModelFileStorageService implements ModelStorageService {
+public class BigraphModelFileStorageService implements ModelStorageService<ModelEntity> {
 
     @Value("${bigellor.model.storage.location}")
     public Path bigraphModelStorageLocation;
@@ -38,34 +39,34 @@ public class BigraphModelFileStorageService implements ModelStorageService {
     ModelStorageRepository modelStorageRepository;
 
     @Override
-    @PostConstruct
+//    @PostConstruct
     public void initialize() {
-        try {
-//            URL location = getClass().getProtectionDomain().getCodeSource().getLocation();
-            ApplicationHome home = new ApplicationHome(this.getClass());
-//            File jarFile = home.getSource();
-            File jarDir = home.getDir();
-            String tmp = bigraphModelStorageLocation.toString();
-            if (bigraphModelStorageLocation.isAbsolute()) {
-                tmp = bigraphModelStorageLocation.getFileName().toString();
-            }
-            File uploadDir = new File(jarDir, tmp);
-            bigraphModelStorageLocation = uploadDir.toPath();
-//            System.out.println("bigellor.model.storage.location is: " + bigraphModelStorageLocation);
-            Files.createDirectories(bigraphModelStorageLocation);
-//            Files.createDirectories(Paths.get(location.toURI()));
-        } catch (IOException e) {
-//            e.printStackTrace();
-            throw new FileStorageException("Could not initialize storage location", e);
-        }
+//        try {
+////            URL location = getClass().getProtectionDomain().getCodeSource().getLocation();
+//            ApplicationHome home = new ApplicationHome(this.getClass());
+////            File jarFile = home.getSource();
+//            File jarDir = home.getDir();
+//            String tmp = bigraphModelStorageLocation.toString();
+//            if (bigraphModelStorageLocation.isAbsolute()) {
+//                tmp = bigraphModelStorageLocation.getFileName().toString();
+//            }
+//            File uploadDir = new File(jarDir, tmp);
+//            bigraphModelStorageLocation = uploadDir.toPath();
+////            System.out.println("bigellor.model.storage.location is: " + bigraphModelStorageLocation);
+//            Files.createDirectories(bigraphModelStorageLocation);
+////            Files.createDirectories(Paths.get(location.toURI()));
+//        } catch (IOException e) {
+////            e.printStackTrace();
+//            throw new FileStorageException("Could not initialize storage location", e);
+//        }
     }
 
     @Override
-    public ModelEntity load(long modelId) {
+    public Optional<ModelEntity> findById(long modelId) {
         // Check whether it is a rule or agent
-        ModelEntity modelEntity = modelStorageRepository.findById(modelId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid model storage entity id:" + modelId));
-        return modelEntity;
+//        ModelEntity modelEntity = modelStorageRepository.findById(modelId)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid model storage entity id:" + modelId));
+        return modelStorageRepository.findById(modelId);
     }
 
     /**
@@ -87,6 +88,10 @@ public class BigraphModelFileStorageService implements ModelStorageService {
         } catch (IOException | EcoreBigraphFileSystemException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
+    }
+
+    public ModelEntity save(ModelEntity modelEntity) {
+        return modelStorageRepository.save(modelEntity);
     }
 
     @Override

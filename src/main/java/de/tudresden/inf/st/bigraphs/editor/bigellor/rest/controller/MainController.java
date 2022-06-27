@@ -24,11 +24,7 @@ import java.util.stream.Stream;
 @RestController
 public class MainController extends AbstractController {
 
-    @Autowired
-    CDOServerService cdoServerService;
 
-    @Autowired
-    ProjectFileLocationService projectFileLocationService;
 
     public MainController() {
 //        this.cdoServerService = cdoServerService;
@@ -67,7 +63,7 @@ public class MainController extends AbstractController {
 //                Please, configure a TaskExecutor in the MVC config under "async support".
 //                The SimpleAsyncTaskExecutor currently in use is not suitable under load.
 //                .onBackpressureDrop()
-                .delayElements(Duration.ofSeconds(5)) // update every 5 seconds
+                .delayElements(Duration.ofSeconds(1)) // update every 1 second
                 ;
     }
 

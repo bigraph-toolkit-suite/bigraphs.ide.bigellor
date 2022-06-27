@@ -20,7 +20,7 @@ public class ProjectCacheLoader extends CacheLoader<String, Project> {
     @Override
     public Project load(String projectName) throws Exception {
         Path startingDir = Paths.get(pService.getProjectFolder(projectName));
-        PopulateProjectDetails pf = new PopulateProjectDetails(projectName);
+        PopulateProjectDetails pf = new PopulateProjectDetails(projectName, pService);
         Files.walkFileTree(startingDir, pf);
 
         Project project = pf.getProject();
@@ -34,6 +34,10 @@ public class ProjectCacheLoader extends CacheLoader<String, Project> {
             newProjectDTO.setProjectStatus(NewProjectDTO.Status.SAVED);
             if (project.getBigraphs().size() > 0)
                 newProjectDTO.setModelStorageEntityId(project.getBigraphs().get(0).getModelStorageId());
+            if(project.getSignature() == null) {
+                throw new Exception("Signature not found");
+            }
+            newProjectDTO.setSigId(project.getSignature().getId());
             newProjectDTO = pService.save(newProjectDTO);
             project.setProjectId(newProjectDTO.getNewProjectId());
         }

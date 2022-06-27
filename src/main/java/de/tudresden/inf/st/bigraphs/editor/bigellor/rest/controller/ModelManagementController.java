@@ -23,9 +23,6 @@ import java.io.IOException;
 @RestController
 public class ModelManagementController extends AbstractController {
 
-    @Autowired
-    ProjectFileLocationService projectFileLocationService;
-
     @RequestMapping(value = "/demobigraph", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String loadBigraphFromFilesystem(
             @RequestParam(required = false, defaultValue = "", value = "filename") String filename,

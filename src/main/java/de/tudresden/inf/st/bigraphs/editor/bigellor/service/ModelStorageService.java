@@ -5,6 +5,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 //TODO implement signaturestorageservice
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
  *
  * @author Dominik Grzelak
  */
-public interface ModelStorageService {
+public interface ModelStorageService<T> {
 
     void initialize();
 
@@ -26,7 +27,9 @@ public interface ModelStorageService {
         //TODO does not make sense when notion of project is introduced
     Stream<Path> loadAll();
 
-    ModelEntity load(long modelId);
+    Optional<T> findById(long modelId);
+
+    T save(T modelEntity);
 
     /**
      * Loads the path of the model, which has to exist.

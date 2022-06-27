@@ -9,7 +9,6 @@ import de.tudresden.inf.st.bigraphs.core.reactivesystem.ReactionRule;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.*;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.NewProjectDTORepository;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
 import org.eclipse.emf.ecore.EPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -43,13 +42,15 @@ public class ProjectFileLocationService {
     public static final String RESOURCES_DIR = Paths.get("data/projects/").toAbsolutePath().toString();
     public static final String RESOURCES_DIR_AGENTS = "agents";
     public static final String RESOURCES_DIR_RULES = "rules";
+
+    public static final String RESOURCES_DIR_SIGNATURES = "signature";
     public static final String RESOURCES_FILE_PROJECTNAME = "name";
 
     @Autowired
-    protected SignatureEntityRepository signatureEntityRepository;
+    BigraphModelFileStorageService modelStorageService;
 
     @Autowired
-    BigraphModelFileStorageService modelStorageService;
+    SignatureFileStorageService signatureFileStorageService;
     @Autowired
     ModelStorageRepository modelStorageRepository;
     @Autowired
@@ -75,7 +76,9 @@ public class ProjectFileLocationService {
                     System.out.println("Project loaded: " + unchecked.getProjectId());
 //                    projectCacheLoader.load(projectId);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+//                    throw new RuntimeException(e);
+                    //TODO check what error happend: sigNotfound: give warning and omit this project
+                    e.printStackTrace();
                 }
             }
         });
@@ -100,6 +103,7 @@ public class ProjectFileLocationService {
         Files.createDirectories(newFile.getParent());
         Files.createDirectories(Paths.get(newFile.toString(), RESOURCES_DIR_AGENTS));
         Files.createDirectories(Paths.get(newFile.toString(), RESOURCES_DIR_RULES));
+        Files.createDirectories(Paths.get(newFile.toString(), RESOURCES_DIR_SIGNATURES));
         File file = Paths.get(newFile.toString(), RESOURCES_FILE_PROJECTNAME).toFile();
         if (!file.exists()) {
             if (file.createNewFile()) {
@@ -111,29 +115,46 @@ public class ProjectFileLocationService {
 
 
     public void prepareNewProjectEntry(final NewProjectDTO newProjectDTO) throws Exception {
-        // Create empty bigraph model and store it first
-        SignatureEntity currentSignatureEntity = signatureEntityRepository.findById(newProjectDTO.getSigId())
+        String projectLocation = prepareNewProjectFolder(newProjectDTO.getProjectName());
+        newProjectDTO.setCreatedDate(new Date());
+
+        // Signature
+        SignatureEntity currentSignatureEntity = signatureFileStorageService.findById(newProjectDTO.getSigId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid signature id:" + newProjectDTO.getSigId()));
+//        signatureFileStorageService.storeModel(
+//                SignatureEntity.convert(currentSignatureEntity),
+//                Paths.get(RESOURCES_DIR, RESOURCES_DIR_SIGNATURES),
+//                currentSignatureEntity.getName()
+//        );
+        File sigFile = Paths.get(projectLocation, RESOURCES_DIR_SIGNATURES, currentSignatureEntity.getName()).toFile();
+        if (!sigFile.exists()) {
+            if (sigFile.createNewFile()) {
+                DomainUtils.writeProjectFile(sigFile.getAbsolutePath(), currentSignatureEntity.getName());
+            }
+        }
         DefaultDynamicSignature dynamicSignature = SignatureEntity.convert(currentSignatureEntity);
+
+        // Bigraph
+        // Create empty bigraph model and store it first
+        // Save the stub bigraph model and attach it the the freshly created project
+        ModelEntity modelEntity = new ModelEntity();
         PureBigraphBuilder<DefaultDynamicSignature> builder = pureBuilder(dynamicSignature);
         builder.createRoot().addSite();
-        ModelEntity modelEntity = new ModelEntity();
-        modelEntity.setModelType(ModelEntity.ModelType.BIGRAPH);
-        modelEntity = modelStorageRepository.save(modelEntity); // save it now to generate an ID
-        // Save the stub bigraph model and attach it the the freshly created project
-        newProjectDTO.setCreatedDate(new Date());
-        newProjectDTO.setModelStorageEntityId(modelEntity.getModelStorageId());
-        save(newProjectDTO);
-        String projectLocation = prepareNewProjectFolder(newProjectDTO.getProjectName());
-
         PureBigraph bigraph = builder.createBigraph();
         String filename = modelStorageService.storeModel(bigraph,
                 Paths.get(projectLocation, RESOURCES_DIR_AGENTS),
-                "agent_" + modelEntity.getModelStorageId() + ".xmi");
+                modelEntity.getModelStorageId() + ".xmi");
+        modelEntity.setModelType(ModelEntity.ModelType.BIGRAPH);
+        modelEntity = modelStorageRepository.save(modelEntity); // save it now to generate an ID
         modelEntity.setFileName(filename);
         modelEntity.setProjectId(newProjectDTO.getNewProjectId());
         modelEntity.setUploadFolder(Paths.get(projectLocation, RESOURCES_DIR_AGENTS).toString());
         modelStorageRepository.save(modelEntity);
+
+        // Project DTO
+        // Update projectDTO in repository
+        newProjectDTO.setModelStorageEntityId(modelEntity.getModelStorageId());
+        save(newProjectDTO);
     }
 
     public String getProjectFolder(String projectName) {
@@ -148,7 +169,7 @@ public class ProjectFileLocationService {
     public LoadedModelResult loadBigraphModelbyFilename(long projectId, String bigraphModelFilename) throws Exception {
         NewProjectDTO newProjectDTO = newProjectDTORepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid new project id:" + projectId));
-        SignatureEntity signatureEntity = signatureEntityRepository.findById(newProjectDTO.getSigId())
+        SignatureEntity signatureEntity = signatureFileStorageService.findById(newProjectDTO.getSigId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid signature id:" + newProjectDTO.getSigId()));
 
         Resource resource = DownloadUtils.loadFileAsResource(
@@ -162,6 +183,15 @@ public class ProjectFileLocationService {
         return LoadedModelResult.create().setSignatureEntity(signatureEntity).setBigraph(demoBigraph);
     }
 
+    public LoadedModelResult loadRuleModelbyFilename(long projectId, String bigraphModelFilename) throws Exception {
+        NewProjectDTO newProjectDTO = newProjectDTORepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid new project id:" + projectId));
+        SignatureEntity signatureEntity = signatureFileStorageService.findById(newProjectDTO.getSigId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid signature id:" + newProjectDTO.getSigId()));
+        //TODO
+        return LoadedModelResult.create().setSignatureEntity(signatureEntity); //.setBigraph(demoBigraph);
+    }
+
     /**
      * Loads an agent or rule specified by the modelId of an existing project.
      *
@@ -170,11 +200,12 @@ public class ProjectFileLocationService {
      * @return
      * @throws Exception
      */
-    public LoadedModelResult loadModel(long projectId, long modelId) throws Exception {
+    public LoadedModelResult loadModelById(long projectId, long modelId) throws Exception {
         NewProjectDTO newProjectDTO = newProjectDTORepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid new project id:" + projectId));
+
         // load signature
-        SignatureEntity currentSignatureEntity = signatureEntityRepository.findById(newProjectDTO.getSigId())
+        SignatureEntity currentSignatureEntity = signatureFileStorageService.findById(newProjectDTO.getSigId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid signature id:" + newProjectDTO.getSigId()));
 
         // load agents and rules if available
@@ -223,9 +254,6 @@ public class ProjectFileLocationService {
     }
 
     public NewProjectDTO save(NewProjectDTO projectDTO) {
-//        if (projectDTO.getNewProjectId() < 0) {
-//            projectDTO.setNewProjectId(newProjectDTORepository.count() + 1);
-//        }
         return newProjectDTORepository.save(projectDTO);
     }
 
@@ -242,7 +270,7 @@ public class ProjectFileLocationService {
         NewProjectDTO newProjectDTO = newProjectDTORepository.findById(newProjId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid project id:" + newProjId));
         String location = prepareNewProjectFolder(newProjectDTO.getProjectName());
-        ModelEntity modelEntity = modelStorageService.load(newProjectDTO.getModelStorageEntityId());
+        ModelEntity modelEntity = modelStorageService.findById(newProjectDTO.getModelStorageEntityId()).get();
         String filename = modelStorageService.storeModel(
                 bigraph,
                 Paths.get(location, RESOURCES_DIR_AGENTS),

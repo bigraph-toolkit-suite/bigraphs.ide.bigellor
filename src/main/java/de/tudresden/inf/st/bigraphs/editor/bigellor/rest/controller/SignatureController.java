@@ -5,6 +5,7 @@ import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ControlEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.SignatureFileStorageService;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,35 +32,17 @@ import java.util.List;
 @RequestMapping("/signatures")
 public class SignatureController extends AbstractController {
 
-//    @Autowired
-//    SignatureEntityRepository signatureEntityRepository;
-
     @ModelAttribute("allTypes")
     public List<ControlStatus> populateControlStatusTypes() {
         return Arrays.asList(ControlStatus.values());
     }
 
-    @RequestMapping(value = "add", params = {"add-control-field"})
-    public ModelAndView addControlField(SignatureEntity signatureEntity,
-                                        BindingResult result,
-                                        ModelAndView modelAndView,
-                                        HttpSession session) {
-//        SignatureEntity sigEntity = (SignatureEntity) session.getAttribute("sigEntity");
-        modelAndView.addObject("signatureEntity", signatureEntity);
-        signatureEntity.getControlEntityList().add(new ControlEntity());
-//        modelAndView.setViewName("add-signature");
-        setDefaultModelViewObjects(modelAndView);
-        modelAndView.getModel().put("content", "add-signature");
-//        modelAndView.getModel().put("showManageSignatureForm", true);
-        modelAndView.setViewName("base");
-        return modelAndView;
-    }
 
     @RequestMapping(value = "add")
-    public ModelAndView getArticleForm(final SignatureEntity signatureEntity,
-                                       ModelAndView modelAndView,
-                                       RedirectAttributes redir,
-                                       HttpSession session) {
+    public ModelAndView addSignature(final SignatureEntity signatureEntity,
+                                     ModelAndView modelAndView,
+                                     RedirectAttributes redir,
+                                     HttpSession session) {
 //        modelAndView.addObject("signatureEntity", signatureEntity);
         signatureEntity.setName("test");
 //        } else {
@@ -83,8 +67,24 @@ public class SignatureController extends AbstractController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "add", params = {"add-control-field"})
+    public ModelAndView addSignatureAddControl(SignatureEntity signatureEntity,
+                                               BindingResult result,
+                                               ModelAndView modelAndView,
+                                               HttpSession session) {
+//        SignatureEntity sigEntity = (SignatureEntity) session.getAttribute("sigEntity");
+        modelAndView.addObject("signatureEntity", signatureEntity);
+        signatureEntity.getControlEntityList().add(new ControlEntity());
+//        modelAndView.setViewName("add-signature");
+        setDefaultModelViewObjects(modelAndView);
+        modelAndView.getModel().put("content", "add-signature");
+//        modelAndView.getModel().put("showManageSignatureForm", true);
+        modelAndView.setViewName("base");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/add", params = {"remove-control"})
-    public ModelAndView removeRow(
+    public ModelAndView addSignatureRemoveControl(
             final SignatureEntity signatureEntity, final BindingResult bindingResult,
             ModelAndView modelAndView,
 //            Model model,
@@ -102,9 +102,9 @@ public class SignatureController extends AbstractController {
     //Model is used to pass data between controllers and views
 //    @PostMapping("/storesignature")
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public ModelAndView storeSignatureEntity(ModelAndView modelAndView,
-                                             @Valid @ModelAttribute(name = "signatureEntity") SignatureEntity signatureEntity, BindingResult result,
-                                             Model model, HttpSession session) {
+    public ModelAndView addSignatureStoreSignatureEntity(ModelAndView modelAndView,
+                                                         @Valid @ModelAttribute(name = "signatureEntity") SignatureEntity signatureEntity, BindingResult result,
+                                                         Model model, HttpSession session) {
         if (result.hasErrors()) {//TODO
 //            model.addAttribute("content", "add-signature");
 //            modelAndView.setViewName("base");
@@ -112,18 +112,23 @@ public class SignatureController extends AbstractController {
             return modelAndView; //"base"; // the template
         }
 
-        signatureEntityRepository.save(signatureEntity);
+        signatureService.storeModel(
+                signatureEntity,
+                Paths.get(SignatureFileStorageService.RESOURCES_DIR_SIGNATURES),
+                signatureEntity.getName()
+        );
+        signatureService.save(signatureEntity);
         modelAndView.setView(new RedirectView("/index"));
         return modelAndView;
     }
 
 
     @RequestMapping("edit/{id}")
-    public ModelAndView showSignatureUpdateForm(@PathVariable("id") long id,
-                                                ModelAndView modelAndView,
+    public ModelAndView editSignature(@PathVariable("id") long id,
+                                      ModelAndView modelAndView,
 //                                                Model model,
-                                                RedirectAttributes redir) {
-        SignatureEntity signatureEntity = signatureEntityRepository.findById(id)
+                                      RedirectAttributes redir) {
+        SignatureEntity signatureEntity = signatureService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid sig Id:" + id));
         setDefaultModelViewObjects(modelAndView);
 //        RedirectView redirectView = new RedirectView("/index", true);
@@ -154,7 +159,13 @@ public class SignatureController extends AbstractController {
             return modelAndView;
         }
 
-        signatureEntityRepository.save(signatureEntity);
+        //TODO a savecallback hook would be better for repo-save action
+        signatureService.storeModel(
+                signatureEntity,
+                Paths.get(SignatureFileStorageService.RESOURCES_DIR_SIGNATURES),
+                signatureEntity.getName()
+        );
+        signatureService.save(signatureEntity);
 //        modelAndView.setView(new RedirectView("/index"));
         setDefaultModelViewObjects(modelAndView);
         modelAndView.addObject("content", "index");
@@ -164,11 +175,11 @@ public class SignatureController extends AbstractController {
     }
 
     @RequestMapping(value = "update/{id}", params = {"add-control-field"})
-    public ModelAndView showSignatureUpdateForm(@PathVariable("id") long id,
-                                                SignatureEntity signatureEntity,
-                                                ModelAndView modelAndView,
-                                                RedirectAttributes redir,
-                                                final HttpServletRequest req
+    public ModelAndView updateSignatureAddControl(@PathVariable("id") long id,
+                                                  SignatureEntity signatureEntity,
+                                                  ModelAndView modelAndView,
+                                                  RedirectAttributes redir,
+                                                  final HttpServletRequest req
     ) {
         setDefaultModelViewObjects(modelAndView);
         modelAndView.getModel().put("content", "edit-signature");
@@ -180,7 +191,7 @@ public class SignatureController extends AbstractController {
     }
 
     @RequestMapping(value = "update/{id}", params = {"remove-control"})
-    public ModelAndView removeRowEdit(
+    public ModelAndView UpdateSignatureRemoveControl(
             @PathVariable("id") long id,
             final SignatureEntity signatureEntity, final BindingResult bindingResult,
             ModelAndView modelAndView,
@@ -197,10 +208,11 @@ public class SignatureController extends AbstractController {
     }
 
     @RequestMapping("delete/{id}")
-    public ModelAndView deleteUser(@PathVariable("id") long id, Model model, ModelAndView modelAndView) {
-        SignatureEntity user = signatureEntityRepository.findById(id)
+    public ModelAndView deleteSignature(@PathVariable("id") long id, Model model, ModelAndView modelAndView) {
+        SignatureEntity signatureEntity = signatureService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid signature Id:" + id));
-        signatureEntityRepository.delete(user);
+        signatureService.delete(signatureEntity);
+        signatureService.deleteModel(signatureEntity);
 //        return "redirect:/index";
 //        modelAndView.setView(new RedirectView("/index"));
         setDefaultModelViewObjects(modelAndView);
@@ -212,7 +224,7 @@ public class SignatureController extends AbstractController {
     @RequestMapping(value = "convert/{id}/json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public String getSignatureAsJson(@PathVariable("id") long id) {
         try {
-            SignatureEntity currentSignatureEntity = signatureEntityRepository.findById(id)
+            SignatureEntity currentSignatureEntity = signatureService.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid signature id:" + id));
             JSONArray array = new JSONArray(currentSignatureEntity.getControlEntityList());
             return array.toString();

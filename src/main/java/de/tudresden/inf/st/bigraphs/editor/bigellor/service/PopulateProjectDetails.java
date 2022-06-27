@@ -2,17 +2,19 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.DomainUtils;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.Project;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
+import java.util.Optional;
 
 import static de.tudresden.inf.st.bigraphs.editor.bigellor.service.PopulateProjectDetails.CurrentDirectoryFlag.*;
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.SKIP_SIBLINGS;
+import static java.nio.file.FileVisitResult.*;
 
 public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
     Project project;
@@ -23,12 +25,15 @@ public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
 
     CurrentDirectoryFlag processingDirectory = UNSPECIFIED;
 
-    public PopulateProjectDetails(String projectName) {
-        this(new Project(projectName));
+    ProjectFileLocationService service;
+
+    public PopulateProjectDetails(String projectName, ProjectFileLocationService service) {
+        this(new Project(projectName), service);
     }
 
-    public PopulateProjectDetails(Project project) {
+    public PopulateProjectDetails(Project project, ProjectFileLocationService service) {
         this.project = project;
+        this.service = service;
     }
 
     public Project getProject() {
@@ -37,9 +42,9 @@ public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-        System.out.format("PRE Directory: %s%n", dir);
+//        System.out.format("PRE Directory: %s%n", dir);
         String directoryName = dir.toFile().getName();
-        if(directoryName.equalsIgnoreCase(String.valueOf(project.getProjectId()))) {
+        if (directoryName.equalsIgnoreCase(String.valueOf(project.getProjectId()))) {
             project.setCreatedDate(new Date(attrs.creationTime().toMillis()));
             project.setModifiedDate(new Date(attrs.lastModifiedTime().toMillis()));
         }
@@ -48,7 +53,9 @@ public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
         }
         if (directoryName.equalsIgnoreCase(ProjectFileLocationService.RESOURCES_DIR_RULES)) {
             processingDirectory = PROCESSING_RULES;
-
+        }
+        if (directoryName.equalsIgnoreCase(ProjectFileLocationService.RESOURCES_DIR_SIGNATURES)) {
+            processingDirectory = PROCESSING_SIGNATURE;
         }
 //        if (directoryName.equalsIgnoreCase(ProjectFileLocationService.RESOURCES_FILE_PROJECTNAME)) {
 //            processingDirectory = UNSPECIFIED;
@@ -75,11 +82,22 @@ public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
 //        System.out.println("(" + attr.size() + "bytes)");
         switch (processingDirectory) {
             case PROCESSING_AGENTS:
-                System.out.println("Procc agents"); //TODO create modelentities
+//                System.out.println("Procc agents"); //TODO create modelentities
                 break;
             case PROCESSING_RULES:
-                System.out.println("Procc rules");
+//                System.out.println("Procc rules");
                 break;
+            case PROCESSING_SIGNATURE:
+//                getIdByName
+                String sigName = FilenameUtils.removeExtension(file.toFile().getName());
+                long sigId = service.signatureFileStorageService.getIdByName(sigName);
+                if (sigId != -1) {
+                    Optional<SignatureEntity> load = service.signatureFileStorageService.findById(sigId);
+                    if (load.isPresent()) {
+                        project.setSignature(load.get());
+                        return SKIP_SIBLINGS;
+                    }
+                }
             case UNSPECIFIED:
                 if (attr.isRegularFile() &&
                         file.toFile().getName().equalsIgnoreCase(ProjectFileLocationService.RESOURCES_FILE_PROJECTNAME)) {
@@ -99,7 +117,7 @@ public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
     // Print each directory visited.
     @Override
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
-        System.out.format("POST Directory: %s%n", dir);
+//        System.out.format("POST Directory: %s%n", dir);
         processingDirectory = UNSPECIFIED;
         return CONTINUE;
     }
@@ -108,7 +126,7 @@ public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
 //    an IOException will be thrown without the possibility to handle the case.
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException exc) {
-        System.err.println(exc);
+//        System.err.println(exc);
         return CONTINUE;
     }
 }

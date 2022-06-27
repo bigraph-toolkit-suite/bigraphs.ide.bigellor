@@ -58,13 +58,10 @@ public class NewProjectController extends AbstractController {
     @Autowired
     ModelStorageRepository modelStorageRepository;
 
-    @Autowired
-    ProjectFileLocationService projectFileLocationService;
-
     @ModelAttribute("availableControls")
     public List<String> populateAvailableControlLabels(NewProjectDTO newProjectDTO) {
         try {
-            SignatureEntity currentSignatureEntity = signatureEntityRepository.findById(newProjectDTO.getSigId())
+            SignatureEntity currentSignatureEntity = signatureService.findById(newProjectDTO.getSigId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid signature id:" + newProjectDTO.getSigId()));
             return currentSignatureEntity.getControlEntityList().stream().map(x -> x.getCtrlLbl()).collect(Collectors.toList());
         } catch (IllegalArgumentException e) {
@@ -147,7 +144,7 @@ public class NewProjectController extends AbstractController {
 
         ProjectFileLocationService.LoadedModelResult result = null;
         try {
-            result = projectFileLocationService.loadModel(
+            result = projectFileLocationService.loadModelById(
                     newProjId,
                     -1
             );

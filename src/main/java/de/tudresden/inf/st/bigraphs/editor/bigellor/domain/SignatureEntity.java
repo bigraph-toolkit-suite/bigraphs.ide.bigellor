@@ -4,6 +4,7 @@ import de.tudresden.inf.st.bigraphs.core.ControlStatus;
 import de.tudresden.inf.st.bigraphs.core.Signature;
 import de.tudresden.inf.st.bigraphs.core.datatypes.FiniteOrdinal;
 import de.tudresden.inf.st.bigraphs.core.datatypes.StringTypedName;
+import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicControl;
 import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.core.impl.builder.DynamicSignatureBuilder;
 import org.json.JSONArray;
@@ -59,6 +60,19 @@ public class SignatureEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static SignatureEntity convert(DefaultDynamicSignature signature, String name) {
+        SignatureEntity signatureEntity = new SignatureEntity();
+        signatureEntity.setName(name);
+        for (DefaultDynamicControl each: signature.getControls()) {
+            ControlEntity controlEntity = new ControlEntity();
+            controlEntity.setCtrlLbl(each.getNamedType().stringValue());
+            controlEntity.setPortCnt(each.getArity().getValue());
+            controlEntity.setStatus(ControlStatus.fromString(each.getControlKind().toString()));
+            signatureEntity.getControlEntityList().add(controlEntity);
+        }
+        return signatureEntity;
     }
 
     public static DefaultDynamicSignature convert(SignatureEntity signatureEntity) {
