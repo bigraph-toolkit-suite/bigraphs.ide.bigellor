@@ -1,10 +1,13 @@
-package de.tudresden.inf.st.bigraphs.editor.bigellor;
+package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import de.tudresden.inf.st.bigraphs.core.EcoreBigraph;
 import de.tudresden.inf.st.bigraphs.core.exceptions.EcoreBigraphFileSystemException;
 import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ModelEntity;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.FileStorageException;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.ModelFileNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.core.io.Resource;
@@ -21,6 +24,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
@@ -29,6 +33,9 @@ public class BigraphModelFileStorageService implements ModelStorageService {
 
     @Value("${bigellor.model.storage.location}")
     public Path bigraphModelStorageLocation;
+
+    @Autowired
+    ModelStorageRepository modelStorageRepository;
 
     @Override
     @PostConstruct
@@ -53,33 +60,12 @@ public class BigraphModelFileStorageService implements ModelStorageService {
         }
     }
 
-    /**
-     * Stores a model file on the filesystem.
-     *
-     * @param file the uploaded model file to store
-     * @return the filename of the stored model, if the operation was successful
-     */
-    public String storeModel(MultipartFile file) {
-
-        // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
-        try {
-            if (file.isEmpty()) {
-                throw new FileStorageException("Failed to store empty file " + fileName);
-            }
-            // Check if the file's name contains invalid characters
-            if (fileName.contains("..")) {
-                throw new FileStorageException("Filename contains an invalid path sequence " + fileName);
-            }
-
-            // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.bigraphModelStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
-        } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
-        }
+    @Override
+    public ModelEntity load(long modelId) {
+        // Check whether it is a rule or agent
+        ModelEntity modelEntity = modelStorageRepository.findById(modelId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid model storage entity id:" + modelId));
+        return modelEntity;
     }
 
     /**
@@ -90,11 +76,12 @@ public class BigraphModelFileStorageService implements ModelStorageService {
      * @param fileName the filename under which the model should be stored
      * @return the filename, if the operation was successful
      */
-    public String storeModel(PureBigraph bigraph, String fileName) {
+    public String storeModel(PureBigraph bigraph, Path location, String fileName) {
         try {
             InputStream inputStreamOfInstanceModel = new EcoreBigraph.Stub<>(bigraph).getInputStreamOfInstanceModel();
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.bigraphModelStorageLocation.resolve(fileName);
+
+            Path targetLocation = location.resolve(fileName);
             Files.copy(inputStreamOfInstanceModel, targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (IOException | EcoreBigraphFileSystemException ex) {
@@ -114,27 +101,14 @@ public class BigraphModelFileStorageService implements ModelStorageService {
     }
 
     @Override
-    public Path load(String filename) {
-        return bigraphModelStorageLocation.resolve(filename).normalize();
+    public Path load(String location, String filename) {
+//        return bigraphModelStorageLocation.resolve(filename).normalize();
+        return Paths.get(location).resolve(filename).normalize();
     }
 
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(bigraphModelStorageLocation.toFile());
-    }
-
-    public Resource loadFileAsResource(String fileName) throws Exception {
-        try {
-            Path filePath = load(fileName); //this.fileStorageLocation.resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new ModelFileNotFoundException("File not found " + fileName);
-            }
-        } catch (MalformedURLException ex) {
-            throw new ModelFileNotFoundException("File not found " + fileName);
-        }
     }
 
 }

@@ -2,40 +2,46 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.domain;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
+/**
+ * NewProjectDTO is a smaller copy of a complete {@link Project} entity containing only the necessary information
+ * for the current view in the UI.
+ *
+ * @author Dominik Grzelak
+ */
 @Entity
 public class NewProjectDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long newProjectId;
+    private long newProjectId = -1;
 
+    @Version
+    Integer version;
     //    @NotEmpty(message = "Signature cannot be empty.")
     @NotNull(message = "Signature cannot be empty.")
     @Min(0)
     long sigId;
 
-    //    @Size(max = 30)
     @NotNull(message = "Project name can not be null.")
     @NotEmpty(message = "Project name cannot be empty.")
+    @Size(max = 120)
     String projectName;
 
     @CreatedDate
 //    @Column(name = "created_date")
     private Date createdDate;
 
-    private long modelStorageEntityId;
+    private long modelStorageEntityId; //current model
 
 
-    enum Status {
+    public enum Status {
         CREATED, SAVED, DIRTY
     }
 

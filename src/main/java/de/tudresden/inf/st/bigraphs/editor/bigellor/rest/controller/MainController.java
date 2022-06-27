@@ -1,11 +1,11 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 
-import de.tudresden.inf.st.bigraphs.editor.bigellor.CDOServerService;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.CDOServerService;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.response.CdoStatusResponse;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,12 +20,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-@Controller
+//@Controller
 @RestController
 public class MainController extends AbstractController {
 
     @Autowired
     CDOServerService cdoServerService;
+
+    @Autowired
+    ProjectFileLocationService projectFileLocationService;
 
     public MainController() {
 //        this.cdoServerService = cdoServerService;
@@ -64,7 +67,7 @@ public class MainController extends AbstractController {
 //                Please, configure a TaskExecutor in the MVC config under "async support".
 //                The SimpleAsyncTaskExecutor currently in use is not suitable under load.
 //                .onBackpressureDrop()
-                .delayElements(Duration.ofSeconds(1))
+                .delayElements(Duration.ofSeconds(5)) // update every 5 seconds
                 ;
     }
 

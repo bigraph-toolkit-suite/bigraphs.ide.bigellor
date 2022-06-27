@@ -11,18 +11,8 @@
 <!-- @{...} : Link (URL) expressions. -->
 <!-- ~{...} : Fragment expressions. -->
 
-
-
 <div class="container-fluid">
     <div th:replace="${content} :: ${content}"></div>
-<!--    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-changeLinkLabel">-->
-<!--        Launch demo modal-->
-<!--    </button>-->
-    <a href="#"
-       data-toggle="modal" data-target="#modal-changeLinkLabel"
-       th:fragment="dropdown-item-signature-overview-modal">Signatures</a>
-
-
 </div>
 
 <!--<div th:replace="fragments/modals/signature-overview-modal :: signature-overview-modal-button"></div>-->

@@ -3,59 +3,41 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
 import de.tudresden.inf.st.bigraphs.core.exceptions.InvalidConnectionException;
 import de.tudresden.inf.st.bigraphs.core.exceptions.builder.TypeNotExistsException;
-import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraphBuilder;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.BigraphModelFileStorageService;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.cytoscape.BBigraph2CytoscapeJSON;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.cytoscape.CytoscapeJSON2BBigraph;
-import de.tudresden.inf.st.spring.data.cdo.CdoTemplate;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService;
 import nu.xom.ParsingException;
-import org.eclipse.emf.ecore.EPackage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.*;
-
-@Controller
+//@Controller
 @RestController
-public class DemoController extends AbstractController {
+public class ModelManagementController extends AbstractController {
 
     @Autowired
-    CdoTemplate cdoTemplate;
-    @Autowired
-    private SignatureEntityRepository signatureEntityRepository;
-    @Autowired
-    BigraphModelFileStorageService bigraphModelFileStorageService;
+    ProjectFileLocationService projectFileLocationService;
 
-    //TODO add requestparam sig id
-    //TODO change URL demobigraph
     @RequestMapping(value = "/demobigraph", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getDemoBigraph(@RequestParam(required = false, defaultValue = "", value = "filename") String filename) {
+    public String loadBigraphFromFilesystem(
+            @RequestParam(required = false, defaultValue = "", value = "filename") String filename,
+            @RequestParam(required = true, value = "id") long projectId) {
         try {
             BBigraph2CytoscapeJSON ecore2JSON = new BBigraph2CytoscapeJSON();
 
             PureBigraph demoBigraph = ecore2JSON.createDemoBigraph();
             if (filename != null && !filename.isEmpty()) {
 //                System.out.println("filename" + filename);
-                Resource resource = bigraphModelFileStorageService.loadFileAsResource(filename);
-                SignatureEntity signatureEntity = signatureEntityRepository.findById(1L).get();//TODO
-                DefaultDynamicSignature sig = SignatureEntity.convert(signatureEntity);
-                EPackage orGetBigraphMetaModel = createOrGetBigraphMetaModel(sig);
-                PureBigraphBuilder<DefaultDynamicSignature> defaultDynamicSignaturePureBigraphBuilder = PureBigraphBuilder.create(sig, orGetBigraphMetaModel, resource.getFile().getAbsolutePath());
-                demoBigraph = defaultDynamicSignaturePureBigraphBuilder.createBigraph();
+                ProjectFileLocationService.LoadedModelResult result = projectFileLocationService.loadBigraphModelbyFilename(projectId, filename);
+                demoBigraph = result.getBigraph();
             }
 
             String json = ecore2JSON.parseBigraph(demoBigraph);

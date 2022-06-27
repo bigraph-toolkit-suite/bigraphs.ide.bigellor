@@ -23,11 +23,9 @@ public abstract class AbstractController {
     protected NewProjectDTORepository newProjectDTORepository;
     @LocalServerPort
     private String port;
-
     protected void setDefaultModelViewContent(ModelAndView modelAndView) {
         modelAndView.addObject("content", "index");
     }
-
     protected void setDefaultModelViewObjects(ModelAndView modelAndView) {
         NewProjectDTO newProjectDTO = new NewProjectDTO();
         if (newProjectDTO.getProjectName() == null || newProjectDTO.getProjectName().isEmpty()) {
@@ -40,7 +38,7 @@ public abstract class AbstractController {
 
     @ModelAttribute(name = "auxiliaryTemplateContentTop")
     protected String injectAuxiliaryTemplateContentTop(final HttpServletRequest req) {
-        if (req.getRequestURL().toString().contains("/projects/edit")) //TODO <- this construct should be improved!
+        if (req.getRequestURL().toString().contains("/projects/edit")) //TODO <- this construct should be improved! Key-Value-Map
             return "new-project-diagram // new-project-diagram-script-block-top";
         return null;
     }

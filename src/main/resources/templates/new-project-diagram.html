@@ -49,99 +49,18 @@
 
 <!--https://stackoverflow.com/questions/40497288/how-to-create-a-fixed-sidebar-layout-with-bootstrap-4-->
 <div th:fragment="new-project-diagram">
+
+    <!-- Main -->
     <div class="row py-3" style="min-height: calc(100vh - 100px);">
-        <div class="col-3 order-2">
-            <div class="sticky-top">
-                <fieldset class="form-group p-2" style="border: none; border-left: 1px solid #e9ecef;">
-                    <legend class="w-auto">Project Details</legend>
-                    <div class="row">
-                        <div class="col"><span><strong>Name</strong></span></div>
-                        <div class="col"><span th:text="${newProjectDTO.projectName}">undefined</span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col"><span>Created</span></div>
-                        <div class="col"><span th:text="${newProjectDTO.createdDate}">undefined</span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col"><span>Signature</span></div>
-                        <div class="col"><span
-                                th:text="${currentSignatureEntity.name} + ' (id=' + ${newProjectDTO.sigId} + ')'">undefined</span>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <fieldset class="p-2" style="border: none; border-left: 1px solid #e9ecef;">
-                    <legend class="w-auto">Diagram</legend>
-                    <div class="form-group">
-                        <label for="shards-custom-slider" th:text="Zoom"></label>
-                        <div id="shards-custom-slider" style="min-width: 300px;">
-                            <input type="hidden" class='custom-slider-input form-control-sm'
-                                   name="custom-slider-value">
-                        </div>
-                    </div>
-                </fieldset>
-
-                <fieldset class="p-2" style="border: none; border-left: 1px solid #e9ecef;">
-                    <legend class="w-auto">Controls</legend>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Ports</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody th:if="${#lists.isEmpty(currentSignatureEntity.controlEntityList)}">
-                        <tr>
-                            <td colspan=3>No controls specified yet for this signature</td>
-                        </tr>
-                        </tbody>
-                        <tbody th:unless="${#lists.isEmpty(currentSignatureEntity.controlEntityList)}">
-                        <!--                        <div class="btn-group btn-group-toggle" data-toggle="buttons">-->
-                        <!--                            <label class="btn btn-primary">-->
-                        <!--                                <input type="checkbox"-->
-                        <!--                                       th:name="optionSig"-->
-                        <!--                                       th:value="${sig.id}"-->
-                        <!--                                       th:id="'optionSig' + ${sig.id}"-->
-                        <!--                                       autocomplete="off"> Select-->
-                        <!--                            </label>-->
-                        <!--                        </div>-->
-
-                        <tr
-                                th:each="entry, stat : ${currentSignatureEntity.controlEntityList}">
-                            <td class="">
-                                <label th:class="${stat.index eq 0} ? 'btn btn-primary w-100' : 'btn btn-primary w-100'"
-                                       th:for="'option' + ${stat.index}">
-                                    <input type="radio"
-                                           th:name="btnGroup-SignatureControls"
-                                           th:value="${entry.ctrlLbl}"
-                                           th:id="'option' + ${stat.index}"
-                                           th:attr="data-ports=${entry.portCnt},data-status=${entry.status}"
-                                           autocomplete="off"
-                                    >
-                                    <span
-                                            class=""
-                                            th:text="${entry.ctrlLbl}"></span>
-                                </label>
-                            </td>
-                            <td class="" th:text="${entry.portCnt}">
-                            </td>
-                            <td class="" th:text="${entry.status}">
-                            </td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </fieldset>
-
-            </div>
-        </div>
+        <div th:replace="fragments/sidebar-diagram :: sidebar-diagram"></div>
         <div class="col" id="main" style="position: relative;">
             <div id="cy-container"></div>
             <script th:src="@{/bigraph/code.js}" type="module"></script>
         </div>
     </div>
+    <!-- Main -->
 
+    <!-- Modals -->
     <div class="modal fade" id="model-load-bigraph-from-filesystem" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLabel"
          aria-hidden="true"
@@ -155,27 +74,36 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!--                    Hier gibt es einen upload bereich und eine filesystem anzeige die direkt aus dem download dir liest-->
-                    <h5>Upload Model File</h5>
-                    <form enctype="multipart/form-data" method="POST" th:action="@{/upload/model/bigraph}"
-                          id="form-upload-single-model">
-                        <div class="form-group">
-                            <label for="model-file-upload">Select Model</label>
-                            <input id="model-file-upload" class="form-control form-control-file" type="file"
-                                   name="file">
-                            <progress></progress>
-                        </div>
-                        <input id="submit-upload-single-model-form" type="button" value="Upload"
-                               class="btn btn-success"
-                        />
-                    </form>
+                    <div>
 
-                    <h5>All Uploaded Files:</h5>
-                    <ul>
-                        <li th:each="entry, stat : ${files}">
-                            <a th:href="${entry.downloadUrl}" target="_blank" th:text="${entry.fileName}"></a>
-                        </li>
-                    </ul>
+                        <!--                    Hier gibt es einen upload bereich und eine filesystem anzeige die direkt aus dem download dir liest-->
+                        <h5>Upload Model File</h5>
+                        <form enctype="multipart/form-data" method="POST" th:action="@{/upload/model/bigraph}"
+                              id="form-upload-single-model">
+                            <div class="input-group">
+                                <div class="form-group">
+                                    <label for="model-file-upload">Select Model</label>
+                                    <input id="model-file-upload" class="form-control form-control-file" type="file"
+                                           name="file">
+                                    <progress></progress>
+                                </div>
+                                <span class="input-group-btn mt-1 pl-1 pt-4" style="width:0;">
+                                <input id="submit-upload-single-model-form" type="button" value="Upload"
+                                       class="btn btn-success"
+                                />
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <hr/>
+                    <div class="mt-5">
+                        <h5>All Uploaded Files:</h5>
+                        <ul>
+                            <li th:each="entry, stat : ${files}">
+                                <a th:href="${entry.downloadUrl}" target="_blank" th:text="${entry.fileName}"></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -183,29 +111,30 @@
             </div>
         </div>
     </div>
+    <!--    <div class="modal fade" id="model-export-bigraph-to-filesystem" tabindex="-1" role="dialog"-->
+    <!--         aria-labelledby="exampleModalLabel"-->
+    <!--         aria-hidden="true"-->
+    <!--    >-->
+    <!--        <div class="modal-dialog" role="document">-->
+    <!--            <div class="modal-content">-->
+    <!--                <div class="modal-header">-->
+    <!--                    <h5 class="modal-title" id="exampleModalLabel">Manage Signatures</h5>-->
+    <!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+    <!--                        <span aria-hidden="true">&times;</span>-->
+    <!--                    </button>-->
+    <!--                </div>-->
+    <!--                <div class="modal-body">-->
 
-    <div class="modal fade" id="model-export-bigraph-to-filesystem" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalLabel"
-         aria-hidden="true"
-    >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Manage Signatures</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--                </div>-->
+    <!--                <div class="modal-footer">-->
+    <!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!-- Modals -->
 </div>
+
 
 <th:block th:fragment="new-project-diagram-script-bottom">
     <script type="text/javascript">
@@ -366,7 +295,7 @@
                             console.log("after conversion post:", data);
                             // window.open(<url>, '_blank');
                             console.log("before ajax_download");
-                            ajax_download('/projects/download/bigraph', data.filename, 'filename');
+                            ajax_download('/projects/[[${newProjectDTO.newProjectId}]]/download/bigraph', data.filename, 'filename');
                             console.log("after ajax_download");
                         },
                         error: function (err) {
@@ -392,7 +321,7 @@
                         console.log("model uploaded, time to show it in the modal to be selected for the next request");
                         //TODO change URL demobigraph
                         //TODO add sig id as request param
-                        $.getJSON("/demobigraph", {filename: response.fileName}, function (data) {
+                        $.getJSON("/demobigraph?id=[[${newProjectDTO.newProjectId}]]", {filename: response.fileName}, function (data) {
                             console.log("Data was loaded:", data);
 
                             //TODO add this to a facade/service class "init/render new bigraph"

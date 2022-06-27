@@ -16,7 +16,7 @@ public class ControlEntity {
 
     String ctrlLbl = "";
     int portCnt = 0;
-    ControlStatus status;
+    ControlStatus status = ControlStatus.ACTIVE;
 
     public ControlEntity() {
     }

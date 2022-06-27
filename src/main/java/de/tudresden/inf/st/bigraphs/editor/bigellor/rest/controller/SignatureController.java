@@ -24,14 +24,14 @@ import java.util.List;
 
 // https://stingh711.github.io/dynamic-forms-with-springmvc-and-thymeleaf.html
 //@RestController
-@Controller
+//@Controller
 @RestController
 //@Validated
 @RequestMapping("/signatures")
 public class SignatureController extends AbstractController {
 
-    @Autowired
-    SignatureEntityRepository signatureEntityRepository;
+//    @Autowired
+//    SignatureEntityRepository signatureEntityRepository;
 
     @ModelAttribute("allTypes")
     public List<ControlStatus> populateControlStatusTypes() {

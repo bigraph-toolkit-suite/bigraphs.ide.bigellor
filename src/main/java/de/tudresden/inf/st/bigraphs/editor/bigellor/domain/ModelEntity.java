@@ -2,8 +2,20 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.domain;
 
 import javax.persistence.*;
 
+/**
+ * Generic class for any bigraph-related model, including:
+ * <ul>
+ *     <li>Bigraphs</li>
+ *     <li>Signatures</li>
+ *     <li>Rules</li>
+ *     <li>Predicates</li>
+ *     <li>BRSs</li>
+ * </ul>
+ *
+ * @author Dominik Grzelak
+ */
 @Entity
-public class ModelStorageEntity {
+public class ModelEntity {
     public enum ModelType {
         BIGRAPH, SIGNATURE, RULE, PREDICATE, SYSTEM
     }
@@ -18,7 +30,7 @@ public class ModelStorageEntity {
     private long projectId;
     private transient String downloadUrl;
 
-    public ModelStorageEntity() {
+    public ModelEntity() {
     }
 
     public long getModelStorageId() {

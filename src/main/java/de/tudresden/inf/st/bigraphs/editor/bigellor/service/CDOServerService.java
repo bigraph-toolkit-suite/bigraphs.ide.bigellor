@@ -1,9 +1,8 @@
-package de.tudresden.inf.st.bigraphs.editor.bigellor;
+package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import de.tudresden.inf.st.spring.data.cdo.CDOStandaloneServer;
 import de.tudresden.inf.st.spring.data.cdo.CdoClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 

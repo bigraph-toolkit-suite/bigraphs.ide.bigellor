@@ -1,5 +1,6 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor;
 
+import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.NewProjectDTO;
 import de.tudresden.inf.st.spring.data.cdo.CdoClient;
 import de.tudresden.inf.st.spring.data.cdo.CdoServerConnectionString;
 import de.tudresden.inf.st.spring.data.cdo.CdoTemplate;
@@ -8,6 +9,8 @@ import de.tudresden.inf.st.spring.data.cdo.repository.config.EnableCdoRepositori
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.relational.core.mapping.event.BeforeConvertCallback;
+import org.springframework.data.relational.core.mapping.event.BeforeSaveCallback;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -57,11 +60,22 @@ public class Config {
     @Bean
     public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(2);
+        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
+        executor.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
         executor.setQueueCapacity(50);
         executor.setThreadNamePrefix("CDOServerAsync-");
         executor.initialize();
         return executor;
     }
+
+//    @Bean
+//    public BeforeConvertCallback<NewProjectDTO> beforeConvertCallback() {
+//
+//        return (newProjectDTO) -> {
+//            if (newProjectDTO.getNewProjectId() == -1) {
+//                newProjectDTO.setNewProjectId(1+1);
+//            }
+//            return newProjectDTO;
+//        };
+//    }
 }

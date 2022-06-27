@@ -5,11 +5,15 @@ import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ControlEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.DomainUtils;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.CDOServerService;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class DemoDataLoader implements ApplicationRunner {
@@ -19,6 +23,9 @@ public class DemoDataLoader implements ApplicationRunner {
     @Autowired
     private CDOServerService serverService;
     private final SignatureEntityRepository signatureEntityRepository;
+
+    @Autowired
+    ProjectFileLocationService projectFileLocationService;
 
     @Value("${bigellor.gen-test-data}")
     private boolean genTestData;
@@ -35,6 +42,12 @@ public class DemoDataLoader implements ApplicationRunner {
         if (!serverWasStarted && useEmbeddedCdoServer) {
             serverService.startServer();
             serverWasStarted = true;
+        }
+
+        try {
+            projectFileLocationService.initProjects();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         if (genTestData) {
