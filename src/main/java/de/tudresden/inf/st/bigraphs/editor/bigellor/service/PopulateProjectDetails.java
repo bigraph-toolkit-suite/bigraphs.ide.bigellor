@@ -83,6 +83,7 @@ public class PopulateProjectDetails extends SimpleFileVisitor<Path> {
         switch (processingDirectory) {
             case PROCESSING_AGENTS:
 //                System.out.println("Procc agents"); //TODO create modelentities
+//                service.modelStorageService.save()
                 break;
             case PROCESSING_RULES:
 //                System.out.println("Procc rules");

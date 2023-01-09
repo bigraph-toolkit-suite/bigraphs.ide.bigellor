@@ -1,20 +1,16 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.domain;
 
 import de.tudresden.inf.st.bigraphs.core.ControlStatus;
-import de.tudresden.inf.st.bigraphs.core.Signature;
 import de.tudresden.inf.st.bigraphs.core.datatypes.FiniteOrdinal;
 import de.tudresden.inf.st.bigraphs.core.datatypes.StringTypedName;
-import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicControl;
-import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
-import de.tudresden.inf.st.bigraphs.core.impl.builder.DynamicSignatureBuilder;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicControl;
+import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
+import de.tudresden.inf.st.bigraphs.core.impl.signature.DynamicSignatureBuilder;
 
 import javax.persistence.*;
-import java.util.HashMap;
+import javax.validation.constraints.NotBlank;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.pureSignatureBuilder;
 
@@ -25,7 +21,7 @@ public class SignatureEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    //    @NotBlank(message = "Name is mandatory")
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     //    @ElementCollection
@@ -65,7 +61,7 @@ public class SignatureEntity {
     public static SignatureEntity convert(DefaultDynamicSignature signature, String name) {
         SignatureEntity signatureEntity = new SignatureEntity();
         signatureEntity.setName(name);
-        for (DefaultDynamicControl each: signature.getControls()) {
+        for (DefaultDynamicControl each : signature.getControls()) {
             ControlEntity controlEntity = new ControlEntity();
             controlEntity.setCtrlLbl(each.getNamedType().stringValue());
             controlEntity.setPortCnt(each.getArity().getValue());

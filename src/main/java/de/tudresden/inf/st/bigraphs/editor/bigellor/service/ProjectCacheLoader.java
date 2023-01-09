@@ -25,7 +25,7 @@ public class ProjectCacheLoader extends CacheLoader<String, Project> {
 
         Project project = pf.getProject();
 
-        if (!pService.projectExistsInRepository(projectName)) {
+        if (!pService.projectDTOExistsInRepository(projectName)) {
             // Create and update respective DTO
             NewProjectDTO newProjectDTO = new NewProjectDTO();
 //            newProjectDTO.setNewProjectId(projectId);

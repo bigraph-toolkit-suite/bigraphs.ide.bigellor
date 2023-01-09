@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="update-signature">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Edit Signature</h4>
+            <th:block th:if="${successMsg != null and #strings.isEmpty(successMsg) == false}">
+                <div class="alert alert-success" role="alert" th:text="${successMsg}">
+                    This is a success!
+                </div>
+            </th:block>
+            <th:block th:if="${errorMsg2 != null and #strings.isEmpty(errorMsg2) == false}">
+                <div class="alert alert-danger" role="alert" th:text="${errorMsg2}">
+                    This is an error!
+                </div>
+            </th:block>
+            <th:block th:if="${errorMsg != null and #strings.isEmpty(errorMsg) == false}">
+                <div class="alert alert-warning" role="alert" th:text="${errorMsg}">
+                    This is a warning!
+                </div>
+            </th:block>
+            <th:block
+                    th:replace="fragments/signature/single-signature-crud-form :: single-signature-crud-form(url=@{/signatures/update/{id}(id=${signatureEntity.id})}, submitBtnText='Update Signature')"
+                    th:remove="tag">
+            </th:block>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -3,7 +3,6 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.rest;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.DomainUtils;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.NewProjectDTO;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.NewProjectDTORepository;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.service.CDOServerService;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.service.SignatureFileStorageService;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -46,6 +43,11 @@ public abstract class AbstractController {
         modelAndView.setViewName("base");
     }
 
+    /**
+     * {@link AbstractController#setDefaultModelViewObjects(ModelAndView)}
+     * @param req
+     * @return
+     */
     @ModelAttribute(name = "auxiliaryTemplateContentTop")
     protected String injectAuxiliaryTemplateContentTop(final HttpServletRequest req) {
         if (req.getRequestURL().toString().contains("/projects/edit")) //TODO <- this construct should be improved! Key-Value-Map
@@ -58,6 +60,15 @@ public abstract class AbstractController {
         if (req.getRequestURL().toString().contains("/projects/edit")) //TODO <- this construct should be improved!
             return "new-project-diagram // new-project-diagram-script-bottom";
         return null;
+    }
+
+    /**
+     * {@link AbstractController#addContent(ModelAndView, String)}
+     * @param modelAndView
+     * @param content
+     */
+    public void addContent(ModelAndView modelAndView, String content) {
+        modelAndView.addObject("content", content);
     }
 
     @ModelAttribute(name = "BigellorPort")

@@ -11,6 +11,11 @@
     <div class="card mt-5">
         <div class="card-body">
             <h4 class="card-title">Create Signature</h4>
+            <th:block th:if="${errorMsg != null and #strings.isEmpty(errorMsg) == false}">
+                <div class="alert alert-warning" role="alert" th:text="${errorMsg}">
+                    This is a warning alert—check it out!
+                </div>
+            </th:block>
             <th:block
                     th:replace="fragments/signature/single-signature-crud-form :: single-signature-crud-form(url=@{/signatures/add}, submitBtnText='Add Signature')"
                     th:remove="tag">

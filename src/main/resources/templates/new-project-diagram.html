@@ -52,7 +52,9 @@
 
     <!-- Main -->
     <div class="row py-3" style="min-height: calc(100vh - 100px);">
+        <!-- Sidebar -->
         <div th:replace="fragments/sidebar-diagram :: sidebar-diagram"></div>
+        <!-- Sidebar -->
         <div class="col" id="main" style="position: relative;">
             <div id="cy-container"></div>
             <script th:src="@{/bigraph/code.js}" type="module"></script>

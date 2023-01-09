@@ -2,7 +2,7 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor;
 
 import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
 import de.tudresden.inf.st.bigraphs.core.ControlStatus;
-import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
+import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ControlEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.DomainUtils;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
@@ -16,8 +16,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

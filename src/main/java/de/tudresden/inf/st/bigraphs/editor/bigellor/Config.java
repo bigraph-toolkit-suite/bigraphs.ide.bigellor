@@ -1,6 +1,5 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor;
 
-import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.NewProjectDTO;
 import de.tudresden.inf.st.spring.data.cdo.CdoClient;
 import de.tudresden.inf.st.spring.data.cdo.CdoServerConnectionString;
 import de.tudresden.inf.st.spring.data.cdo.CdoTemplate;
@@ -9,8 +8,6 @@ import de.tudresden.inf.st.spring.data.cdo.repository.config.EnableCdoRepositori
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.relational.core.mapping.event.BeforeConvertCallback;
-import org.springframework.data.relational.core.mapping.event.BeforeSaveCallback;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 

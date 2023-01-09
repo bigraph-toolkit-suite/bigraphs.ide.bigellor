@@ -267,7 +267,7 @@ var mySingleton = (function () {
                                 'background-color': 'white',
                                 'border-style': 'dashed',
                                 'border-width': 1,
-                                'shape': 'roundrectangle',
+                                'shape': 'round-rectangle',
                                 'padding': 20,
                                 'label': (node) => node.data('index'),
                                 // 'label': 'data(index)',
@@ -361,7 +361,7 @@ var mySingleton = (function () {
                 });
 
                 cy.on('cxttap', '.region, .site, .node', function (evt) {
-                    // console.log("evt.target.hasClass(\"node\")", evt.target.hasClass("node"));
+                    console.log("evt.target.hasClass(\"node\")", evt.target.hasClass("node"));
                     if (evt.target.hasClass("node")) {
                         // console.log("evt.target", evt.target);
                         // console.log("evt.target.children", evt.target.children());
@@ -466,8 +466,7 @@ var mySingleton = (function () {
                 });
 
                 // Try to nest selected node/site into clicked node
-                cy.on('mySingleTap', '.region, .node, .site',
-                    function (evt, rpos) {
+                cy.on('mySingleTap', '.region, .node, .site', function (evt, rpos) {
                         var selected = cy.$(':selected')
                         console.log("selected node in CY is:", selected);
                         var target = evt.target

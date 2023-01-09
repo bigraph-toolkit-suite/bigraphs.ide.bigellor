@@ -6,11 +6,15 @@ import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.result.view.Rendering;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.spring5.context.webflux.IReactiveDataDriverContextVariable;
+import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
@@ -23,7 +27,6 @@ import java.util.stream.Stream;
 //@Controller
 @RestController
 public class MainController extends AbstractController {
-
 
 
     public MainController() {
@@ -39,6 +42,12 @@ public class MainController extends AbstractController {
             setDefaultModelViewContent(modelAndView);
         }
         setDefaultModelViewObjects(modelAndView);
+
+//        IReactiveDataDriverContextVariable reactiveDataDrivenMode =
+//                new ReactiveDataDriverContextVariable(Flux.fromIterable(projectFileLocationService.findAllProjects()), 1);
+//        modelAndView.addObject("projects", reactiveDataDrivenMode);
+
+//        return Rendering.view(modelAndView.getViewName()).model(modelAndView.getModel()).status(modelAndView.getStatus()).build();
         return modelAndView;
     }
 

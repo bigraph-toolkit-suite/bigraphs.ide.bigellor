@@ -31,6 +31,7 @@ public class CDOServerService {
             CDOStandaloneServer.start(server);
         } catch (Exception e) {
             e.printStackTrace();
+            server = null;
         }
     }
 
@@ -42,8 +43,9 @@ public class CDOServerService {
     }
 
     public void stopServer() {
-        if (server != null)
+        if (server != null) {
             server.stop();
+            server = null;
+        }
     }
-
 }

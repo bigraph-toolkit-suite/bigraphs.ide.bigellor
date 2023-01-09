@@ -40,13 +40,15 @@ import java.util.stream.Collectors;
 
 import static de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService.RESOURCES_DIR_AGENTS;
 
+//TODO newbigraph: navbar etc., set current modelentity
+
 /**
  * Rest controller for managing all project-related tasks on the UI:
  * loading and storing projects and corresponding models.
  */
 //@Controller
 @RestController
-public class NewProjectController extends AbstractController {
+public class ProjectController extends AbstractController {
 
     public static final String URL_DOWNLOAD_BIGRAPH = "/projects/{id}/download/bigraph";
 
@@ -137,10 +139,10 @@ public class NewProjectController extends AbstractController {
     @RequestMapping(value = "/projects/edit", method = {RequestMethod.GET})
     public ModelAndView createNewProjectGet(ModelAndView modelAndView,
                                             @RequestParam(name = "id") long newProjId,
-                                            @ModelAttribute(name = "specialContent") String specialContent,
-                                            Model model) {
+                                            @ModelAttribute(name = "specialContent") String specialContent) {
         setDefaultModelViewObjects(modelAndView);
-        long id = model.asMap().get("id") != null ? (long) model.asMap().get("id") : newProjId;
+//        long id = model.asMap().get("id") != null ? (long) model.asMap().get("id") : newProjId;
+        long id = modelAndView.getModelMap().get("id") != null ? (long) modelAndView.getModelMap().get("id") : newProjId;
 
         ProjectFileLocationService.LoadedModelResult result = null;
         try {
@@ -217,7 +219,8 @@ public class NewProjectController extends AbstractController {
         }
     }
 
-    @PostMapping("/upload/model/bigraph/{id}")
+    //TODO move to MMController
+    @PostMapping("/upload/model/bigraph/{id}")//TODO change url as below
     public ModelUploadedResponse uploadFile(@RequestParam("file") MultipartFile file,
                                             @PathVariable(name = "id") long newProjId) {
         String fileName = projectFileLocationService.uploadBigraphModel(newProjId, file);

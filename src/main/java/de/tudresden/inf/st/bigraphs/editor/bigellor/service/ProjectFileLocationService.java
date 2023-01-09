@@ -2,9 +2,9 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
-import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
 import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraphBuilder;
+import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.core.reactivesystem.ReactionRule;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.*;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
@@ -90,11 +90,11 @@ public class ProjectFileLocationService {
         }
     }
 
-    public boolean projectExistsInRepository(long projectId) {
+    public boolean projectDTOExistsInRepository(long projectId) {
         return newProjectDTORepository.findById(projectId).isPresent();
     }
 
-    public boolean projectExistsInRepository(String projectName) {
+    public boolean projectDTOExistsInRepository(String projectName) {
         return newProjectDTORepository.findByProjectName(projectName).isPresent();
     }
 
@@ -113,6 +113,9 @@ public class ProjectFileLocationService {
         return newFile.toAbsolutePath().toString();
     }
 
+    public Iterable<Project> findAllProjects() {
+        return projectCache.asMap().values();
+    }
 
     public void prepareNewProjectEntry(final NewProjectDTO newProjectDTO) throws Exception {
         String projectLocation = prepareNewProjectFolder(newProjectDTO.getProjectName());

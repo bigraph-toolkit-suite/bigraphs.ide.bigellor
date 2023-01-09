@@ -1,7 +1,7 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
-import de.tudresden.inf.st.bigraphs.core.impl.DefaultDynamicSignature;
+import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.FileStorageException;
@@ -45,7 +45,8 @@ public class SignatureFileStorageService implements ModelStorageService<Signatur
                         save(convertedSignature);
                         System.out.println("Signature loaded: " + convertedSignature.getId() + " --> Name: " + convertedSignature.getName());
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+//                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                 }
             });
