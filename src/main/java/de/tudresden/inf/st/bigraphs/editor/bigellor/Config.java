@@ -1,10 +1,10 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor;
 
-import de.tudresden.inf.st.spring.data.cdo.CdoClient;
-import de.tudresden.inf.st.spring.data.cdo.CdoServerConnectionString;
-import de.tudresden.inf.st.spring.data.cdo.CdoTemplate;
-import de.tudresden.inf.st.spring.data.cdo.SimpleCdoDbFactory;
-import de.tudresden.inf.st.spring.data.cdo.repository.config.EnableCdoRepositories;
+import org.bigraphs.spring.data.cdo.CdoClient;
+import org.bigraphs.spring.data.cdo.CdoServerConnectionString;
+import org.bigraphs.spring.data.cdo.CdoTemplate;
+import org.bigraphs.spring.data.cdo.SimpleCdoDbFactory;
+import org.bigraphs.spring.data.cdo.repository.config.EnableCdoRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

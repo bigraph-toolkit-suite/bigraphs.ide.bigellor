@@ -1,8 +1,8 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
-import de.tudresden.inf.st.spring.data.cdo.CDOStandaloneServer;
-import de.tudresden.inf.st.spring.data.cdo.CdoClient;
 import org.apache.commons.io.FileUtils;
+import org.bigraphs.spring.data.cdo.CDOStandaloneServer;
+import org.bigraphs.spring.data.cdo.CdoClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Path;
 
 @Service

@@ -3,9 +3,9 @@
 ----
 
 | Branch  | Current Version |
-|---------|---|
-| Main    | N.A. |
-| Develop | 1.0.0-SNAPSHOT |
+|---------|-----------------|
+| Main    | 1.0.0-SNAPSHOT  |
+| Develop | 2.0.0-SNAPSHOT  |
 
 ----
 
@@ -51,7 +51,7 @@ After the [above command](#Building-from-Source) successfully finished, you can 
 Therefore, execute the following commands:
 ```shell
 cd ./dist/
-java -jar bigellor-1.0.0-SNAPSHOT-exec.jar
+java -jar bigellor-starter-1.0.0-SNAPSHOT-exec.jar
 ```
 
 Then, just open the web browser and navigate to `http://localhost:8080`.
