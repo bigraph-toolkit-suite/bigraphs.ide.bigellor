@@ -1,8 +1,8 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor;
 
-import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
-import de.tudresden.inf.st.bigraphs.core.ControlStatus;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.BigraphFileModelManagement;
+import org.bigraphs.framework.core.ControlStatus;
+import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ControlEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.DomainUtils;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 @Component
 public class DemoDataLoader implements ApplicationRunner {
@@ -37,6 +38,9 @@ public class DemoDataLoader implements ApplicationRunner {
     @Value("${bigellor.gen-test-data}")
     private boolean genTestData;
 
+    @Value("${bigellor.model.storage.location:''}")
+    private String modelStorageLocation;
+
     @Value("${bigellor.cdo.embedded}")
     private boolean useEmbeddedCdoServer;
 
@@ -46,6 +50,10 @@ public class DemoDataLoader implements ApplicationRunner {
     }
 
     public void run(ApplicationArguments args) {
+        if (genTestData) {
+            genTestData();
+        }
+
         if (!serverWasStarted && useEmbeddedCdoServer) {
             serverService.startServer();
             serverWasStarted = true;
@@ -57,37 +65,38 @@ public class DemoDataLoader implements ApplicationRunner {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        if (genTestData) {
-            SignatureEntity signatureEntity = new SignatureEntity();
-            signatureEntity.setName(DomainUtils.createPlaceholderName());
-            ControlEntity controlEntity = new ControlEntity();
-            controlEntity.setCtrlLbl("User");
-            controlEntity.setPortCnt(3);
-            controlEntity.setStatus(ControlStatus.ACTIVE);
-            signatureEntity.getControlEntityList().add(controlEntity);
+    private void genTestData() {
+        SignatureEntity signatureEntity = new SignatureEntity();
+        signatureEntity.setName(DomainUtils.createPlaceholderName());
+        ControlEntity controlEntity = new ControlEntity();
+        controlEntity.setCtrlLbl("User");
+        controlEntity.setPortCnt(3);
+        controlEntity.setStatus(ControlStatus.ACTIVE);
+        signatureEntity.getControlEntityList().add(controlEntity);
 
-            ControlEntity controlEntity2 = new ControlEntity();
-            controlEntity2.setCtrlLbl("PC");
-            controlEntity2.setPortCnt(3);
-            controlEntity2.setStatus(ControlStatus.ACTIVE);
-            signatureEntity.getControlEntityList().add(controlEntity2);
+        ControlEntity controlEntity2 = new ControlEntity();
+        controlEntity2.setCtrlLbl("PC");
+        controlEntity2.setPortCnt(3);
+        controlEntity2.setStatus(ControlStatus.ACTIVE);
+        signatureEntity.getControlEntityList().add(controlEntity2);
 
-            ControlEntity controlEntity3 = new ControlEntity();
-            controlEntity3.setCtrlLbl("Room");
-            controlEntity3.setPortCnt(3);
-            controlEntity3.setStatus(ControlStatus.ACTIVE);
-            signatureEntity.getControlEntityList().add(controlEntity3);
+        ControlEntity controlEntity3 = new ControlEntity();
+        controlEntity3.setCtrlLbl("Room");
+        controlEntity3.setPortCnt(3);
+        controlEntity3.setStatus(ControlStatus.ACTIVE);
+        signatureEntity.getControlEntityList().add(controlEntity3);
 
-            try {
-                DefaultDynamicSignature convert = SignatureEntity.convert(signatureEntity);
-                BigraphFileModelManagement.Store.exportAsInstanceModel(convert, new FileOutputStream("smarthome.xmi"), "x");
-                BigraphFileModelManagement.Store.exportAsMetaModel(convert, new FileOutputStream("smarthome.ecore"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            this.signatureEntityRepository.save(signatureEntity);
+        try {
+            String resourceDataDir = Paths.get("data/signatures/").toAbsolutePath().toString();
+            DefaultDynamicSignature convert = SignatureEntity.convert(signatureEntity);
+            BigraphFileModelManagement.Store.exportAsInstanceModel(convert, new FileOutputStream(Paths.get(resourceDataDir, "smarthome.xmi").toFile()), "smarthome.ecore");
+            BigraphFileModelManagement.Store.exportAsMetaModel(convert, new FileOutputStream(Paths.get(resourceDataDir, "smarthome.ecore").toFile()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        this.signatureEntityRepository.save(signatureEntity);
     }
 }

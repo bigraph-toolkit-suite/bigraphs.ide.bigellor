@@ -1,16 +1,18 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.domain;
 
-import de.tudresden.inf.st.bigraphs.core.Bigraph;
-import de.tudresden.inf.st.bigraphs.core.Signature;
-import de.tudresden.inf.st.bigraphs.core.reactivesystem.ReactionRule;
+import org.bigraphs.framework.core.Bigraph;
+import org.bigraphs.framework.core.Signature;
+import org.bigraphs.framework.core.reactivesystem.ReactionRule;
 
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+//@Entity
 public class SimulationSpecification {
-
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     protected Signature<?> signature;

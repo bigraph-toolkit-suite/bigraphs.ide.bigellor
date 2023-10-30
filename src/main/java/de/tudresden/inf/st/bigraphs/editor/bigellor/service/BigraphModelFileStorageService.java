@@ -1,27 +1,19 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
-import de.tudresden.inf.st.bigraphs.core.EcoreBigraph;
-import de.tudresden.inf.st.bigraphs.core.exceptions.EcoreBigraphFileSystemException;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ModelEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.FileStorageException;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.ModelFileNotFoundException;
+import org.bigraphs.framework.core.EcoreBigraph;
+import org.bigraphs.framework.core.exceptions.EcoreBigraphFileSystemException;
+import org.bigraphs.framework.core.impl.pure.PureBigraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.system.ApplicationHome;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

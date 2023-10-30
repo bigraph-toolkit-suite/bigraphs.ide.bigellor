@@ -1,14 +1,13 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 
-import de.tudresden.inf.st.bigraphs.core.ControlStatus;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ControlEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.service.SignatureFileStorageService;
+import org.bigraphs.framework.core.ControlStatus;
 import org.json.JSONArray;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;

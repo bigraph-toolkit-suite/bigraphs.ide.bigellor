@@ -1,6 +1,5 @@
 upload/
 data/
-HELP.md
 TODO
 target/
 !.mvn/wrapper/maven-wrapper.jar

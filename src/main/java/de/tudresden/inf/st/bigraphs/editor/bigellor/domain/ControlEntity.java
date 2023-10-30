@@ -1,6 +1,6 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.domain;
 
-import de.tudresden.inf.st.bigraphs.core.ControlStatus;
+import org.bigraphs.framework.core.ControlStatus;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

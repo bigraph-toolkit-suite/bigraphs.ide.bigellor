@@ -9,6 +9,11 @@
       "name": "bigellor.model.storage.location",
       "type": "java.lang.String",
       "description": "Specify the upload directory of Bigellor for model files."
+    },
+    {
+      "name": "bigellor.cdo.config",
+      "type": "java.lang.String",
+      "description": "Specify the CDO database properties (XML) for Bigellor to start the CDO database server."
     }
   ]
 }

@@ -2,10 +2,10 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraphBuilder;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
-import de.tudresden.inf.st.bigraphs.core.reactivesystem.ReactionRule;
+import org.bigraphs.framework.core.impl.pure.PureBigraph;
+import org.bigraphs.framework.core.impl.pure.PureBigraphBuilder;
+import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.reactivesystem.ReactionRule;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.*;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.NewProjectDTORepository;
@@ -23,8 +23,8 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Optional;
 
-import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.createOrGetBigraphMetaModel;
-import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.pureBuilder;
+import static org.bigraphs.framework.core.factory.BigraphFactory.createOrGetBigraphMetaModel;
+import static org.bigraphs.framework.core.factory.BigraphFactory.pureBuilder;
 
 /**
  * A service facade for project-relevant activities.
@@ -39,7 +39,7 @@ import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.pureBuild
 public class ProjectFileLocationService {
 
     //TODO read from config file
-    public static final String RESOURCES_DIR = Paths.get("data/projects/").toAbsolutePath().toString();
+    public static final String RESOURCES_DIR_PROJECT = Paths.get("data/projects/").toAbsolutePath().toString();
     public static final String RESOURCES_DIR_AGENTS = "agents";
     public static final String RESOURCES_DIR_RULES = "rules";
 
@@ -68,7 +68,8 @@ public class ProjectFileLocationService {
      */
     public void initProjects() throws IOException {
         initCache();
-        Files.list(Paths.get(RESOURCES_DIR)).forEach(x -> {
+        Files.createDirectories(Paths.get(RESOURCES_DIR_PROJECT));
+        Files.list(Paths.get(RESOURCES_DIR_PROJECT)).forEach(x -> {
             if (x.toFile().isDirectory()) {
                 String projectName = x.toFile().getName();
                 try {
@@ -99,7 +100,7 @@ public class ProjectFileLocationService {
     }
 
     protected String prepareNewProjectFolder(String projectName) throws Exception {
-        Path newFile = Paths.get(RESOURCES_DIR, projectName);
+        Path newFile = Paths.get(RESOURCES_DIR_PROJECT, projectName);
         Files.createDirectories(newFile.getParent());
         Files.createDirectories(Paths.get(newFile.toString(), RESOURCES_DIR_AGENTS));
         Files.createDirectories(Paths.get(newFile.toString(), RESOURCES_DIR_RULES));
@@ -161,7 +162,7 @@ public class ProjectFileLocationService {
     }
 
     public String getProjectFolder(String projectName) {
-        Path newFile = Paths.get(RESOURCES_DIR, projectName);
+        Path newFile = Paths.get(RESOURCES_DIR_PROJECT, projectName);
         return newFile.toAbsolutePath().toString();
     }
 

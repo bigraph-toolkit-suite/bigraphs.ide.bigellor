@@ -5,16 +5,16 @@
  */
 package de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion;
 
-import de.tudresden.inf.st.bigraphs.core.datatypes.FiniteOrdinal;
-import de.tudresden.inf.st.bigraphs.core.datatypes.StringTypedName;
-import de.tudresden.inf.st.bigraphs.core.exceptions.InvalidConnectionException;
-import de.tudresden.inf.st.bigraphs.core.exceptions.builder.LinkTypeNotExistsException;
-import de.tudresden.inf.st.bigraphs.core.exceptions.builder.TypeNotExistsException;
-import de.tudresden.inf.st.bigraphs.core.impl.BigraphEntity;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraphBuilder;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DynamicSignatureBuilder;
+import org.bigraphs.framework.core.datatypes.FiniteOrdinal;
+import org.bigraphs.framework.core.datatypes.StringTypedName;
+import org.bigraphs.framework.core.exceptions.InvalidConnectionException;
+import org.bigraphs.framework.core.exceptions.builder.LinkTypeNotExistsException;
+import org.bigraphs.framework.core.exceptions.builder.TypeNotExistsException;
+import org.bigraphs.framework.core.impl.BigraphEntity;
+import org.bigraphs.framework.core.impl.pure.PureBigraph;
+import org.bigraphs.framework.core.impl.pure.PureBigraphBuilder;
+import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicSignatureBuilder;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.json.JSONArray;
@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.pureBuilder;
-import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.pureSignatureBuilder;
+import static org.bigraphs.framework.core.factory.BigraphFactory.pureBuilder;
+import static org.bigraphs.framework.core.factory.BigraphFactory.pureSignatureBuilder;
 
 /**
  * @author simon
@@ -44,10 +44,10 @@ public class Ecore2JSON {
         this.regions = new HashMap<>();
         // When we traverse the ports of a node and look whether they are connected
         // to a link (edge or outer name), we save the name of the link and the
-        // id of the port linked. Later when we create the visual elements for a 
+        // id of the port linked. Later when we create the visual elements for a
         // hyperedge, we need to create a line for each port connected to it with
         // the port's id as target. I.e. the port id used as id attribute in
-        // the JSON-artifact created for the port. 
+        // the JSON-artifact created for the port.
         this.linked_outer_names = new HashSetValuedHashMap<>();
         // Same idea as for 'linked_outer_names'
         this.edges = new HashSetValuedHashMap<>();
@@ -99,8 +99,8 @@ public class Ecore2JSON {
         //int i = 0;
         for (BigraphEntity.RootEntity region : bigraph.getRoots()) {
             System.out.println("region with index: " + region.getIndex());
-            
-            
+
+
 
             /*
             var json_root = new JSONObject();
@@ -115,24 +115,24 @@ public class Ecore2JSON {
             json_root.put("data", json_root_data);
             json_root.put("classes","region");
             json.put(json_root);
-            
+
             this.regions.put(region.getIndex(), random_id);
 */
-            
+
             /*
             for (var node : bigraph.getChildrenOf(region) ) {
                 System.out.println("parsing node");
                 System.out.println(node.getControl());
                 System.out.println(node.getType());
-                // pass in the randomly generated id for the region so that children 
+                // pass in the randomly generated id for the region so that children
                 // (nodes and sites) can use it as 'parent'-attribute
                 //parseNode(node, bigraph, json, random_id);
-                
+
             }*/
 
             //parseNode(bigraph.getNodes().get(i), bigraph);
 
-            // pass in the randomly generated id for the region so that children 
+            // pass in the randomly generated id for the region so that children
             // (nodes and sites) can use it as 'parent'-attribute
             parsePlace(region, bigraph, json, "regions");
             /*
@@ -245,10 +245,10 @@ public class Ecore2JSON {
             if (n.getType().toString().equals("NODE")) {
                 System.out.println("node or region? node!");
                 var nn = (BigraphEntity.NodeEntity) n;
-                
+
                 // For each port, we must check if it is connected to an edge or outer name.
                 for ( BigraphEntity.Port p : bigraph.getPorts(nn)) {
-                    
+
                     var port_index = p.getIndex();
                     var link = bigraph.getLinkOfPoint(p);
                     var typeOfPoint = link.getType();
@@ -257,23 +257,23 @@ public class Ecore2JSON {
                         var e = (BigraphEntity.Edge) link;
                         System.out.println("name of edge: " + e.getName());
                     }
-                    
+
                     if (typeOfPoint.toString().equals("OUTER_NAME")) {
                         var o = (BigraphEntity.OuterName) link;
                         System.out.println("name of outer name: " + o.getName());
-                    }   
-                    
+                    }
+
                     if (typeOfPoint.toString().equals("INNER_NAME")) {
                         var i = (BigraphEntity.OuterName) link;
                         System.out.println("name of inner name: " + i.getName());
-                    }                       
+                    }
                 }
-                
+
                 System.out.println("parseNode.parseNode");
                 parseNode(n, bigraph, json, random_id);
-                
+
             }
-            
+
 
 
         }*/
@@ -333,7 +333,7 @@ public class Ecore2JSON {
 
             this.inner_names.put(inner_name.getName(), random_id);
 
-            // The outer name may be connected to an edge or outer name, so 
+            // The outer name may be connected to an edge or outer name, so
             // its 'random_id' must be stored under the name of the element it is connected
             // to so that the line from the visual element of the inner name to
             // the junction point can be created. The line's target-attribute is
@@ -356,7 +356,7 @@ public class Ecore2JSON {
     // For links, we need to create a cytoscape node that is the junction point
     // where the lines to the visual elements representing ports, inner- and outer
     // names meet. From the bigraph perspective, outer names _are_ the link but
-    // are displayed as distinct cytoscape nodes. 
+    // are displayed as distinct cytoscape nodes.
     public void parseLinks(PureBigraph bigraph, JSONArray json) {
         System.out.println("parseLinks.edges");
 
@@ -384,27 +384,27 @@ public class Ecore2JSON {
             //System.out.println("this edge is connected to: " + this.edges.get(e.getName()));
             System.out.println("this hyperedge (outer name) is connected to: " + connected_elements);
 
-        }        
-           
+        }
+
         /*
         for (BigraphEntity.Edge e : bigraph.getEdges()) {
             System.out.println("edge found: " + e.getName());
-            
+
             var connected_elements = this.edges.get(e.getName());
             var junction_point_id = junctionPointHelper(json, connected_elements);
-            
+
             System.out.println("this edge is connected to: " + this.edges.get(e.getName()));
-            
+
             //for (String port : connected_ports)
-            
+
             // Now lines must be created for each element visually connected to
             // it. As this link is a outer name, a visual element representing
             // it was already created (parseNames()).
             /*
             for (var connected_element_id : this.edges.get(e.getName()) ) {
-                
+
                 var line_random_id = java.util.UUID.randomUUID().toString();
-                
+
                 var json_line = new JSONObject();
                 json_line.put("group","edges");
                 json_line.put("classes", "bigraph-edge");
@@ -414,21 +414,21 @@ public class Ecore2JSON {
                 json_line_data.put("target", connected_element_id);
                 json_line.put("data", json_line_data);
                 json.put(json_line);
-                
-                
+
+
             }*/
         //}*/
-        
+
         /*
         System.out.println("parseLinks.outer-names");
         for (BigraphEntity.OuterName o : bigraph.getOuterNames()) {
             System.out.println("outer name found: " + o.getName());
-            
+
             var connected_elements = this.edges.get(o.getName());
             var junction_point_id = junctionPointHelper(json, connected_elements);
-            
-            
-            
+
+
+
         }
         */
 
@@ -479,7 +479,7 @@ public class Ecore2JSON {
         String control_name = node.getControl().getNamedType().stringValue();
 
         // No sense in creating visual nodes for ports if the nodes does not
-        // have ports in the first place. 
+        // have ports in the first place.
         if (ports > 0) {
 
             // collect these ports that have a link
@@ -549,7 +549,7 @@ public class Ecore2JSON {
                         BigraphEntity.OuterName outer_name = (BigraphEntity.OuterName) link;
                         System.out.println("port " + port + " is connected to outer name: " + outer_name.getName());
                         // remember the port id so that we can use it as target
-                        // for the line, that is created later when the links 
+                        // for the line, that is created later when the links
                         // are traversed
                         this.linked_outer_names.put(outer_name.getName(), port_id);
                     }
@@ -558,7 +558,7 @@ public class Ecore2JSON {
                         BigraphEntity.Edge edge = (BigraphEntity.Edge) link;
                         System.out.println("port " + port + " is connected to edge: " + edge.getName());
                         // remember the port id so that we can use it as target
-                        // for the line, that is created later when the links 
+                        // for the line, that is created later when the links
                         // are traversed
                         this.edges.put(edge.getName(), port_id);
                     }

@@ -1,7 +1,7 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
-import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.BigraphFileModelManagement;
+import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.FileStorageException;

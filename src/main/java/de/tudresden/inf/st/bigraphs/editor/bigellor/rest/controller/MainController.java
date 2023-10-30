@@ -1,20 +1,13 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 
-import de.tudresden.inf.st.bigraphs.editor.bigellor.service.CDOServerService;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.response.CdoStatusResponse;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
-import de.tudresden.inf.st.bigraphs.editor.bigellor.service.ProjectFileLocationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.response.CdoStatusResponse;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.result.view.Rendering;
 import org.springframework.web.servlet.ModelAndView;
-import org.thymeleaf.spring5.context.webflux.IReactiveDataDriverContextVariable;
-import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;

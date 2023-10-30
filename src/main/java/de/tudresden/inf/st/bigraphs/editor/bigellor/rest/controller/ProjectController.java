@@ -1,6 +1,6 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
+import org.bigraphs.framework.core.impl.pure.PureBigraph;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ModelEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.NewProjectDTO;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;

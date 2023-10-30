@@ -1,11 +1,11 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.cytoscape;
 
 import com.google.common.graph.Traverser;
-import de.tudresden.inf.st.bigraphs.core.Bigraph;
-import de.tudresden.inf.st.bigraphs.core.BigraphEntityType;
-import de.tudresden.inf.st.bigraphs.core.impl.BigraphEntity;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicControl;
+import org.bigraphs.framework.core.Bigraph;
+import org.bigraphs.framework.core.BigraphEntityType;
+import org.bigraphs.framework.core.impl.BigraphEntity;
+import org.bigraphs.framework.core.impl.pure.PureBigraph;
+import org.bigraphs.framework.core.impl.signature.DefaultDynamicControl;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.Ecore2JSON;
 import org.json.JSONArray;
 import org.json.JSONException;

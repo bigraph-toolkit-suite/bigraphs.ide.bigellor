@@ -8,23 +8,67 @@
         <version>2.6.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>de.tudresden.inf.st.bigraphs.editor</groupId>
-    <artifactId>bigellor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>bigellor</name>
-    <description>A simple visual editor for bigraph modelling purposes</description>
+    <groupId>org.bigraphs.ide.bigellor</groupId>
+    <artifactId>bigellor-starter</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Bigellor</name>
+    <description>Bigellor is a web-based editor for the visual modeling of bigraphs.</description>
+    <url>https://github.com/bigraph-toolkit-suite/bigraphs.ide.bigellor</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <comments>Applies to Bigellor</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>dgrzelak</id>
+            <name>Dominik Grzelak</name>
+            <email>dominik.grzelak@tu-dresden.de</email>
+            <organization>Technische Universität Dresden</organization>
+            <organizationUrl>https://tu-dresden.de/ing/informatik/smt/st</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+    </developers>
 
     <properties>
+        <!-- Project-specific -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
+        <distribution.folder>${project.basedir}/dist</distribution.folder>
         <!-- Versions -->
-        <bigraph.version>0.9.6-SNAPSHOT</bigraph.version>
+        <bigraph.version>1.0.0-SNAPSHOT</bigraph.version>
         <spring.data.cdo.version>0.5.0-SNAPSHOT</spring.data.cdo.version>
         <equinox.app.version>1.6.100</equinox.app.version>
         <guava.version>31.1-jre</guava.version>
     </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/bigraph-toolkit-suite/bigraphs.ide.bigellor.git</connection>
+        <developerConnection>scm:git@github.com:bigraph-toolkit-suite/bigraphs.ide.bigellor.git
+        </developerConnection>
+        <url>https://github.com/bigraph-toolkit-suite/bigraphs.ide.bigellor.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
 
     <dependencies>
         <dependency>
@@ -56,67 +100,44 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.app</artifactId>
             <version>${equinox.app.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.eclipse.platform</groupId>-->
-<!--            <artifactId>org.eclipse.equinox.common</artifactId>-->
-<!--            <version>3.16.100</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.eclipse.platform</groupId>-->
-<!--            <artifactId>org.eclipse.core.runtime</artifactId>-->
-<!--            <version>3.25.0</version>-->
-<!--        </dependency>-->
         <dependency>
-            <groupId>de.tudresden.inf.st.bigraphs</groupId>
+            <groupId>org.bigraphs.framework</groupId>
             <artifactId>bigraph-core</artifactId>
-            <!--            <exclusions>-->
-            <!--                <exclusion>-->
-            <!--                    <groupId>org.eclipse.platform</groupId>-->
-            <!--                    <artifactId>org.eclipse.equinox.common</artifactId>-->
-            <!--                </exclusion>-->
-            <!--                <exclusion>-->
-            <!--                    <groupId>org.eclipse.platform</groupId>-->
-            <!--                    <artifactId>org.eclipse.core.runtime</artifactId>-->
-            <!--                </exclusion>-->
-            <!--            </exclusions>-->
         </dependency>
         <dependency>
-            <groupId>de.tudresden.inf.st.bigraphs</groupId>
+            <groupId>org.bigraphs.framework</groupId>
             <artifactId>bigraph-simulation</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.tudresden.inf.st.bigraphs</groupId>
+            <groupId>org.bigraphs.framework</groupId>
             <artifactId>bigraph-visualization</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.tudresden.inf.st.bigraphs</groupId>
+            <groupId>org.bigraphs.framework</groupId>
             <artifactId>bigraph-converter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-cdo</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
         </dependency>
         <!-- Other -->
         <dependency>
@@ -142,6 +163,12 @@
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -151,25 +178,25 @@
         <dependencies>
             <!-- the core module -->
             <dependency>
-                <groupId>de.tudresden.inf.st.bigraphs</groupId>
+                <groupId>org.bigraphs.framework</groupId>
                 <artifactId>bigraph-core</artifactId>
-                <version>${bigraph.version}</version>
-            </dependency>
-            <!-- the rewriting module -->
-            <dependency>
-                <groupId>de.tudresden.inf.st.bigraphs</groupId>
-                <artifactId>bigraph-simulation</artifactId>
                 <version>${bigraph.version}</version>
             </dependency>
             <!-- the visualization module -->
             <dependency>
-                <groupId>de.tudresden.inf.st.bigraphs</groupId>
+                <groupId>org.bigraphs.framework</groupId>
                 <artifactId>bigraph-visualization</artifactId>
+                <version>${bigraph.version}</version>
+            </dependency>
+            <!-- the rewriting module -->
+            <dependency>
+                <groupId>org.bigraphs.framework</groupId>
+                <artifactId>bigraph-simulation</artifactId>
                 <version>${bigraph.version}</version>
             </dependency>
             <!-- the converter module -->
             <dependency>
-                <groupId>de.tudresden.inf.st.bigraphs</groupId>
+                <groupId>org.bigraphs.framework</groupId>
                 <artifactId>bigraph-converter</artifactId>
                 <version>${bigraph.version}</version>
             </dependency>
@@ -178,6 +205,17 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-cdo</artifactId>
                 <version>${spring.data.cdo.version}</version>
+            </dependency>
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>2.0.9</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-nop</artifactId>
+                <version>2.0.7</version>
             </dependency>
             <!-- Other -->
             <dependency>
@@ -211,6 +249,43 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets combine.children="append">
+                        <fileset>
+                            <directory>${distribution.folder}</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${distribution.folder}</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>config/**</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -226,44 +301,72 @@
                         </goals>
                         <configuration>
                             <classifier>exec</classifier>
+                            <outputDirectory>${distribution.folder}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                    <configuration>
+                        <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.1.1</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
-
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>STFactory</id>
-            <name>st-tu-dresden-artifactory</name>
-            <url>https://stgroup.jfrog.io/artifactory/st-tu-dresden-maven-repository/</url>
-        </repository>
-        <!-- p2 repositories -->
-        <!-- https://www.eclipse.org/Xtext/documentation/350_continuous_integration.html#maven-tycho-hints -->
-        <repository>
-            <id>Xtext</id>
-            <url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.27.0/</url>
-            <layout>p2</layout>
-        </repository>
-        <repository>
-            <id>EMF</id>
-            <url>http://download.eclipse.org/modeling/emf/emf/builds/release/2.30</url>
-            <layout>p2</layout>
-        </repository>
-        <repository>
-            <id>MWE2MWE</id>
-            <url>http://download.eclipse.org/modeling/emft/mwe/updates/releases/2.13.0/</url>
-            <layout>p2</layout>
-        </repository>
-        <repository>
-            <id>Eclipse</id>
-            <url>http://download.eclipse.org/releases/2022-06</url>
-            <layout>p2</layout>
-        </repository>
-    </repositories>
 
 </project>

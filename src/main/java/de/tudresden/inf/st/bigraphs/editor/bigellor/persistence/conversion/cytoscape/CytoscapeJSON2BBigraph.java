@@ -1,15 +1,15 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.cytoscape;
 
-import de.tudresden.inf.st.bigraphs.core.ControlStatus;
-import de.tudresden.inf.st.bigraphs.core.datatypes.FiniteOrdinal;
-import de.tudresden.inf.st.bigraphs.core.datatypes.StringTypedName;
-import de.tudresden.inf.st.bigraphs.core.impl.BigraphEntity;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.MutableBuilder;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraphBuilder;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicControl;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DefaultDynamicSignature;
-import de.tudresden.inf.st.bigraphs.core.impl.signature.DynamicSignatureBuilder;
+import org.bigraphs.framework.core.ControlStatus;
+import org.bigraphs.framework.core.datatypes.FiniteOrdinal;
+import org.bigraphs.framework.core.datatypes.StringTypedName;
+import org.bigraphs.framework.core.impl.BigraphEntity;
+import org.bigraphs.framework.core.impl.pure.MutableBuilder;
+import org.bigraphs.framework.core.impl.pure.PureBigraph;
+import org.bigraphs.framework.core.impl.pure.PureBigraphBuilder;
+import org.bigraphs.framework.core.impl.signature.DefaultDynamicControl;
+import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicSignatureBuilder;
 import nu.xom.Element;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
@@ -28,7 +28,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.*;
 
-import static de.tudresden.inf.st.bigraphs.core.factory.BigraphFactory.pureSignatureBuilder;
+import static org.bigraphs.framework.core.factory.BigraphFactory.pureSignatureBuilder;
 
 /**
  * @author Dominik Grzelak
@@ -351,7 +351,7 @@ public class CytoscapeJSON2BBigraph {
         return signature;
     }
 
-    // 'builder' is the current node (bigraph-framework) and 'childNodes' the 
+    // 'builder' is the current node (bigraph-framework) and 'childNodes' the
     // corresponding children from the graphml/xml-model to be converted in to
     // nodes in the bigraph-framework and that are logically the children of 'builder'
     private void traverseNode(nu.xom.Node parentNodeXml, BigraphEntity currentParent) {

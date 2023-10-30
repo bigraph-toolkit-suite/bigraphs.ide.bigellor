@@ -1,9 +1,9 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.rest.controller;
 
-import de.tudresden.inf.st.bigraphs.core.BigraphFileModelManagement;
-import de.tudresden.inf.st.bigraphs.core.exceptions.InvalidConnectionException;
-import de.tudresden.inf.st.bigraphs.core.exceptions.builder.TypeNotExistsException;
-import de.tudresden.inf.st.bigraphs.core.impl.pure.PureBigraph;
+import org.bigraphs.framework.core.BigraphFileModelManagement;
+import org.bigraphs.framework.core.exceptions.InvalidConnectionException;
+import org.bigraphs.framework.core.exceptions.builder.TypeNotExistsException;
+import org.bigraphs.framework.core.impl.pure.PureBigraph;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.cytoscape.BBigraph2CytoscapeJSON;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.cytoscape.CytoscapeJSON2BBigraph;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.AbstractController;
