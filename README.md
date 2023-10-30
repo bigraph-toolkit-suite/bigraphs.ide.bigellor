@@ -27,9 +27,9 @@ and [Cytoscape.js](https://js.cytoscape.org/) for the visualization of bigraphs 
 - Java 17
 - Maven 3.8.3 (minimum)
 - (Optional) Eclipse CDO Explorer to view and modify the bigraphs directly in the database
-  - 1) Download a CDO Explorer via the [Eclipse Installer](https://www.eclipse.org/downloads/packages/installer) 
-  Version `cdo-master-latest-release-2023-01` supporting CDO protocol version 48.
-  Eclipse IDE version 2023-09 supports only CDO protocol version 49.
+  - 1) Download a CDO Explorer via the [Eclipse Installer](https://www.eclipse.org/downloads/packages/installer)
+       Use Eclipse Version 2022-12 (4.26.0), which supports CDO protocol version **48**.
+       Eclipse IDE version 2023-09 supports only CDO protocol version 49.
   - 2) Any Eclipse IDE with CDO support, must support **CDO protocol version 48**
 
 ### Building from Source
