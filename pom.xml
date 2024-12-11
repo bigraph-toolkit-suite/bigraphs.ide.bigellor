@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.bigraphs.ide.bigellor</groupId>
     <artifactId>bigellor-starter</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>Bigellor</name>
     <description>Bigellor is a web-based editor for the visual modeling of bigraphs.</description>
     <url>https://github.com/bigraph-toolkit-suite/bigraphs.ide.bigellor</url>
@@ -45,8 +45,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <distribution.folder>${project.basedir}/dist</distribution.folder>
         <!-- Versions -->
-        <bigraph.version>1.0.0-SNAPSHOT</bigraph.version>
-        <spring.data.cdo.version>0.6.0-SNAPSHOT</spring.data.cdo.version>
+        <bigraph.version>2.0.1</bigraph.version>
+        <spring.data.cdo.version>0.7.1</spring.data.cdo.version>
         <equinox.app.version>1.6.100</equinox.app.version>
         <guava.version>31.1-jre</guava.version>
     </properties>

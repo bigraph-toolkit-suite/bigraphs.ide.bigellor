@@ -2,6 +2,7 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
+import org.bigraphs.framework.core.BigraphFileModelManagement;
 import org.bigraphs.framework.core.impl.pure.PureBigraph;
 import org.bigraphs.framework.core.impl.pure.PureBigraphBuilder;
 import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
@@ -9,6 +10,8 @@ import org.bigraphs.framework.core.reactivesystem.ReactionRule;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.*;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.NewProjectDTORepository;
+import org.bigraphs.framework.core.utils.BigraphUtil;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -21,10 +24,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
-import static org.bigraphs.framework.core.factory.BigraphFactory.createOrGetBigraphMetaModel;
-import static org.bigraphs.framework.core.factory.BigraphFactory.pureBuilder;
+import static org.bigraphs.framework.core.factory.BigraphFactory.*;
 
 /**
  * A service facade for project-relevant activities.

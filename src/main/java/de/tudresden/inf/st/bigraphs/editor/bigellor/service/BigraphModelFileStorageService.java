@@ -3,6 +3,7 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ModelEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.FileStorageException;
+import org.bigraphs.framework.core.BigraphFileModelManagement;
 import org.bigraphs.framework.core.EcoreBigraph;
 import org.bigraphs.framework.core.exceptions.EcoreBigraphFileSystemException;
 import org.bigraphs.framework.core.impl.pure.PureBigraph;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -72,6 +74,12 @@ public class BigraphModelFileStorageService implements ModelStorageService<Model
     public String storeModel(PureBigraph bigraph, Path location, String fileName) {
         try {
             InputStream inputStreamOfInstanceModel = new EcoreBigraph.Stub<>(bigraph).getInputStreamOfInstanceModel();
+            String nameWithoutExtension = fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName;
+            String metaModelFilename = nameWithoutExtension + "mm.ecore";
+            BigraphFileModelManagement.Store.exportAsMetaModel(
+                    bigraph,
+                    new FileOutputStream(location.resolve(metaModelFilename).toFile())
+                    );
             // Copy file to the target location (Replacing existing file with the same name)
 
             Path targetLocation = location.resolve(fileName);

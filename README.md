@@ -4,8 +4,8 @@
 
 | Branch  | Current Version |
 |---------|-----------------|
-| Main    | 1.0.0-SNAPSHOT  |
-| Develop | 2.0.0-SNAPSHOT  |
+| Main    | 2.0.0           |
+| Develop | 3.0.0-SNAPSHOT  |
 
 ----
 
@@ -24,13 +24,8 @@ and [Cytoscape.js](https://js.cytoscape.org/) for the visualization of bigraphs 
 
 **Requirements** 
 
-- Java 17
-- Maven 3.8.3 (minimum)
-- (Optional) Eclipse CDO Explorer to view and modify the bigraphs directly in the database
-  - 1) Download a CDO Explorer via the [Eclipse Installer](https://www.eclipse.org/downloads/packages/installer)
-       Use Eclipse Version 2022-12 (4.26.0), which supports CDO protocol version **48**.
-       Eclipse IDE version 2023-09 supports only CDO protocol version 49.
-  - 2) Any Eclipse IDE with CDO support, must support **CDO protocol version 48**
+- Java >= 17
+- Maven >= 3.8.3
 
 ### Building from Source
 
@@ -46,12 +41,12 @@ from the root of this project.
 
 > **Note:** Ensure that there is read/write permission on the directory, where **Bigellor** is started.
 
-After the [above command](#Building-from-Source) successfully finished, you can start using **Bigellor**.
+After the build process is successfully finished, you can start **Bigellor**.
 
 Therefore, execute the following commands:
 ```shell
 cd ./dist/
-java -jar bigellor-starter-1.0.0-SNAPSHOT-exec.jar
+java -jar bigellor-starter-VERSION-exec.jar
 ```
 
 Then, just open the web browser and navigate to `http://localhost:8080`.
@@ -62,7 +57,7 @@ The correct server name and port will be displayed in the console if defaults we
 
 Properties can be configured when starting **Bigellor** in the following way:
 ```shell
-java -jar bigellor-1.0.0-SNAPSHOT-exec.jar --PROPERTY=VALUE --PROPERTY2=VALUE2 ...
+java -jar bigellor-starter-VERSION-exec.jar --PROPERTY=VALUE --PROPERTY2=VALUE2 ...
 ```
 
 |Properties| Description                                                                                                                                               |
@@ -82,6 +77,10 @@ To access Eclipse CDO in Bigellor conveniently the Spring-way (via repositories)
 An example of the default database configuration properties can be found here: `src/main/resources/config/cdo-server.xml`.
 When Bigellor is build from source, the application can be found in the `dist/` folder from the root of this project.
 Included is also the `config/cdo-server.xml`, which can be configured afterwards.
+
+Use Eclipse CDO Explorer to view and modify the bigraphs directly in the database.
+For **Bigellor v2.0.0** download the CDO Explorer via the [Eclipse Installer](https://www.eclipse.org/downloads/packages/installer).
+Use Eclipse Version 2022-12 (4.26.0), which supports CDO protocol version **48**.
 
 ## Build Problems and Solutions
 
@@ -120,37 +119,3 @@ It helps to correct the `JAVA_HOME` environment variable.
    See the License for the specific language governing permissions and
    limitations under the License.
 ```
-
-
-<!--
-## Deploy a Web ARchive to a Web Server
-
-Even though **Bigellor** runs a standalone webserver itself, it can be deployed as `*.war` to Tomcat or other 
-webservers that have a web container (i.e., servlet container) component, for example, Jetty and WildFly.
-
-Two options are available in this project:
-- Automatic deploy to Apache Tomcat
-- Manual deploy: Just generate the `*.war` and deploy it manually to the desired webserver
-
-### Automatic Deployment to Tomcat
-
-First, the configuration file has to be adjusted:
-See https://www.baeldung.com/tomcat-deploy-war
-```shell
-mvn ..........
-```
-
-Second, the following command must be executed:
-```shell
-# Deploy the Bigellor application 
-mvn tomcat7:deploy
-
-# Undeploy the Bigellor application 
-mvn tomcat7:undeploy
-
-# Redeploy the Bigellor application after making changes
-mvn tomcat7:redeploy
-```
-
-### Manual Deployment
--->

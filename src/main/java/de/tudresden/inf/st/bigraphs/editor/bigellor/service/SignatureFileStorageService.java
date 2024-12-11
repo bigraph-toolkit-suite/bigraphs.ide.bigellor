@@ -81,7 +81,7 @@ public class SignatureFileStorageService implements ModelStorageService<Signatur
             DefaultDynamicSignature signature = SignatureEntity.convert(signatureEntity);
             Path targetLocation = location.resolve(fileName + ".xmi");
             Path targetLocationMetamodel = location.resolve(fileName + ".ecore");
-            BigraphFileModelManagement.Store.exportAsInstanceModel(signature, new FileOutputStream(targetLocation.toFile()));
+            BigraphFileModelManagement.Store.exportAsInstanceModel(signature, new FileOutputStream(targetLocation.toFile()), targetLocationMetamodel.toFile().getName());
             BigraphFileModelManagement.Store.exportAsMetaModel(signature, new FileOutputStream(targetLocationMetamodel.toFile()));
             return fileName;
         } catch (IOException ex) {

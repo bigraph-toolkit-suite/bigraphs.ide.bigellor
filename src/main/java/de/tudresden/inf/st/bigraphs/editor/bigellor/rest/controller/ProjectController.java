@@ -210,7 +210,6 @@ public class ProjectController extends AbstractController {
         try {
             CytoscapeJSON2BBigraph converter = new CytoscapeJSON2BBigraph(bigraphJsonModel);
             PureBigraph bigraph = converter.convert();
-//            BigraphFileModelManagement.Store.exportAsInstanceModel(bigraph, System.out);
 
             String filename = projectFileLocationService.update(newProjId, bigraph);
             return ResponseEntity.ok(new ProjectSavedResponse(newProjId, filename));
