@@ -2,10 +2,7 @@
 
 ----
 
-| Branch  | Current Version |
-|---------|-----------------|
-| Main    | 2.0.1           |
-| Develop | 3.0.0-SNAPSHOT  |
+Latest Version: v2.1.0
 
 ----
 
@@ -22,16 +19,49 @@ and [Cytoscape.js](https://js.cytoscape.org/) for the visualization of bigraphs 
 
 ## Getting Started
 
-**Requirements** 
+> ✅ For Users: See [Docker](#docker-container) for how to install and run the application as a container.
+> 
+> 🧑‍💻 For Developers: See [Building from Source](#building-from-source) if you want to build and run Bigellor locally.
+
+### Docker Container
+
+Build the image:
+
+```shell
+$ docker build -t bigellor-app .
+```
+
+Run the container:
+
+```shell
+$ docker run -p 8080:8080 bigellor-app
+```
+
+Then, just open the web browser and navigate to 
+- [`http://localhost:8080`](http://localhost:8080).
+
+**Optional: Change App Port**
+
+If you want the app to run on a different port (e.g. 9090), you need execute:
+
+```shell
+$ docker run -p 9090:9090 \
+-e "SPRING_APPLICATION_JSON={\"server.port\":9090}" \
+bigellor-app
+```
+
+### Building from Source
+
+**Requirements**
 
 - Java >= 17
 - Maven >= 3.8.3
 
-### Building from Source
+**Building the App**
 
 The following command must be executed from the root directory of this project:
 ```shell
-mvn clean package -DskipTests
+$ mvn clean package -DskipTests
 ```
 
 After the command successfully finishes, the executable application can be found in the directory `dist/`
@@ -99,6 +129,10 @@ Java version: 11.0.20.1
 In this example, Maven version 3.9.5 uses the JDK 11.
 However, JDK 17 is required for this project (see [Requirements](#Getting-Started)).
 It helps to correct the `JAVA_HOME` environment variable.
+
+## Acknowledgement
+
+thanks to Simon Tobies for his contributions to the visualization and modeling backend of Bigellor.
 
 ## License
 

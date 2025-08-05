@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.bigraphs.ide.bigellor</groupId>
     <artifactId>bigellor-starter</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>2.1.0</version>
     <name>Bigellor</name>
     <description>Bigellor is a web-based editor for the visual modeling of bigraphs.</description>
     <url>https://github.com/bigraph-toolkit-suite/bigraphs.ide.bigellor</url>
