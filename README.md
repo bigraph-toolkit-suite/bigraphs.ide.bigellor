@@ -1,10 +1,13 @@
+<img src="etc/icon.png" style="zoom:90%;" />
+
+> Latest Version: **2.1.0**
+
+- ✅ For Users: See [Docker](#docker-container) for how to install and run the application as a container.
+- 🧑‍💻 For Developers: See [Building from Source](#building-from-source) if you want to build and run Bigellor locally.
+
+---- 
+
 # Bigellor
-
-----
-
-Latest Version: v2.1.0
-
-----
 
 **Bigellor** is a web-based modelling tool to graphically create and visualize bigraphs.
 
@@ -19,9 +22,7 @@ and [Cytoscape.js](https://js.cytoscape.org/) for the visualization of bigraphs 
 
 ## Getting Started
 
-> ✅ For Users: See [Docker](#docker-container) for how to install and run the application as a container.
-> 
-> 🧑‍💻 For Developers: See [Building from Source](#building-from-source) if you want to build and run Bigellor locally.
+
 
 ### Docker Container
 
