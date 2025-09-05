@@ -2,7 +2,7 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor;
 
 import org.bigraphs.framework.core.BigraphFileModelManagement;
 import org.bigraphs.framework.core.ControlStatus;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicSignature;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.ControlEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.DomainUtils;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
@@ -90,7 +90,7 @@ public class DemoDataLoader implements ApplicationRunner {
 
         try {
             String resourceDataDir = Paths.get("data/signatures/").toAbsolutePath().toString();
-            DefaultDynamicSignature convert = SignatureEntity.convert(signatureEntity);
+            DynamicSignature convert = SignatureEntity.convert(signatureEntity);
             BigraphFileModelManagement.Store.exportAsInstanceModel(convert, new FileOutputStream(Paths.get(resourceDataDir, "smarthome.xmi").toFile()), "smarthome.ecore");
             BigraphFileModelManagement.Store.exportAsMetaModel(convert, new FileOutputStream(Paths.get(resourceDataDir, "smarthome.ecore").toFile()));
         } catch (IOException e) {

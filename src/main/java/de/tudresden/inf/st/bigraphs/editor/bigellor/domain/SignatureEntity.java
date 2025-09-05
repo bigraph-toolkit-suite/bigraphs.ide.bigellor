@@ -3,8 +3,8 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.domain;
 import org.bigraphs.framework.core.ControlStatus;
 import org.bigraphs.framework.core.datatypes.FiniteOrdinal;
 import org.bigraphs.framework.core.datatypes.StringTypedName;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicControl;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicControl;
+import org.bigraphs.framework.core.impl.signature.DynamicSignature;
 import org.bigraphs.framework.core.impl.signature.DynamicSignatureBuilder;
 
 import javax.persistence.*;
@@ -58,10 +58,10 @@ public class SignatureEntity {
         this.name = name;
     }
 
-    public static SignatureEntity convert(DefaultDynamicSignature signature, String name) {
+    public static SignatureEntity convert(DynamicSignature signature, String name) {
         SignatureEntity signatureEntity = new SignatureEntity();
         signatureEntity.setName(name);
-        for (DefaultDynamicControl each : signature.getControls()) {
+        for (DynamicControl each : signature.getControls()) {
             ControlEntity controlEntity = new ControlEntity();
             controlEntity.setCtrlLbl(each.getNamedType().stringValue());
             controlEntity.setPortCnt(each.getArity().getValue());
@@ -71,7 +71,7 @@ public class SignatureEntity {
         return signatureEntity;
     }
 
-    public static DefaultDynamicSignature convert(SignatureEntity signatureEntity) {
+    public static DynamicSignature convert(SignatureEntity signatureEntity) {
         DynamicSignatureBuilder signatureBuilder = pureSignatureBuilder();
         for (int i = 0; i < signatureEntity.getControlEntityList().size(); i = i + 1) {
             ControlEntity controlEntity = signatureEntity.getControlEntityList().get(i);

@@ -7,8 +7,8 @@ import org.bigraphs.framework.core.impl.BigraphEntity;
 import org.bigraphs.framework.core.impl.pure.MutableBuilder;
 import org.bigraphs.framework.core.impl.pure.PureBigraph;
 import org.bigraphs.framework.core.impl.pure.PureBigraphBuilder;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicControl;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicControl;
+import org.bigraphs.framework.core.impl.signature.DynamicSignature;
 import org.bigraphs.framework.core.impl.signature.DynamicSignatureBuilder;
 import nu.xom.Element;
 import nu.xom.Nodes;
@@ -35,7 +35,7 @@ import static org.bigraphs.framework.core.factory.BigraphFactory.pureSignatureBu
  */
 public class CytoscapeJSON2BBigraph {
 
-    private DefaultDynamicSignature signature;
+    private DynamicSignature signature;
 
     private HashMap<Integer, BigraphEntity.RootEntity> newRoots = new LinkedHashMap<>();
     private HashMap<String, BigraphEntity.NodeEntity> newNodes = new LinkedHashMap<>();
@@ -52,7 +52,7 @@ public class CytoscapeJSON2BBigraph {
 
     private nu.xom.Document doc;
     private nu.xom.Document doc2;
-    private MutableBuilder<DefaultDynamicSignature> builder;
+    private MutableBuilder<DynamicSignature> builder;
 
     public CytoscapeJSON2BBigraph(String requestBody) throws ParsingException, IOException {
 
@@ -99,7 +99,7 @@ public class CytoscapeJSON2BBigraph {
         performLinkage();
 
         // Create bigraph
-        PureBigraphBuilder<DefaultDynamicSignature>.InstanceParameter meta = builder.new InstanceParameter(
+        PureBigraphBuilder<DynamicSignature>.InstanceParameter meta = builder.new InstanceParameter(
                 builder.getMetaModel(),
                 signature,
                 newRoots,
@@ -326,7 +326,7 @@ public class CytoscapeJSON2BBigraph {
         }
     }
 
-    private DefaultDynamicSignature parseSignature(JSONArray controls) {
+    private DynamicSignature parseSignature(JSONArray controls) {
 //        System.out.println("converting signature: " + controls);
         // https://git-st.inf.tu-dresden.de/bigraphs/bigraph-framework
 //        PureBigraphFactory factory = AbstractBigraphFactory.createPureBigraphFactory();
@@ -346,7 +346,7 @@ public class CytoscapeJSON2BBigraph {
                     .assign();
         }
 
-        DefaultDynamicSignature signature = signatureBuilder.create();
+        DynamicSignature signature = signatureBuilder.create();
 //        System.out.println("signature builder result: " + signature);
         return signature;
     }
@@ -375,7 +375,7 @@ public class CytoscapeJSON2BBigraph {
             BigraphEntity ourNode = null;
             if (isNode) {
                 String control = n.query("data[@type='data'][@key='ctrlLabel']").get(0).getValue();
-                DefaultDynamicControl controlByName = signature.getControlByName(control);
+                DynamicControl controlByName = signature.getControlByName(control);
                 BigraphEntity.NodeEntity newNode = (BigraphEntity.NodeEntity) builder.createNewNode(controlByName, nodeId);
                 newNodes.put(nodeId, newNode);
                 ourNode = newNode;

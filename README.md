@@ -1,6 +1,6 @@
 <img src="etc/icon.png" style="zoom:90%;" />
 
-> Latest Version: **2.1.0**
+> Latest Version: **2.2.0**
 
 - ✅ For Users: See [Docker](#docker-container) for how to install and run the application as a container.
 - 🧑‍💻 For Developers: See [Building from Source](#building-from-source) if you want to build and run Bigellor locally.
@@ -55,7 +55,7 @@ bigellor-app
 
 **Requirements**
 
-- Java >= 17
+- Java == 17
 - Maven >= 3.8.3
 
 **Building the App**
@@ -77,7 +77,8 @@ After the build process is successfully finished, you can start **Bigellor**.
 Therefore, execute the following commands:
 ```shell
 $ cd ./dist/
-$ java -jar bigellor-starter-2.1.0-exec.jar
+$ java -jar bigellor-starter-*-exec.jar
+
 ```
 
 Then, just open the web browser and navigate to [`http://localhost:8080`](http://localhost:8080).

@@ -1,7 +1,7 @@
 package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import org.bigraphs.framework.core.BigraphFileModelManagement;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicSignature;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.SignatureEntity;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.SignatureEntityRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.rest.exception.FileStorageException;
@@ -40,7 +40,7 @@ public class SignatureFileStorageService implements ModelStorageService<Signatur
                                 Paths.get(RESOURCES_DIR_SIGNATURES, FilenameUtils.removeExtension(projectName) + ".ecore").toString(),
                                 Paths.get(RESOURCES_DIR_SIGNATURES, projectName).toString()
                         );
-                        DefaultDynamicSignature signature = new DefaultDynamicSignature(eObjects.get(0));
+                        DynamicSignature signature = new DynamicSignature(eObjects.get(0));
                         SignatureEntity convertedSignature = SignatureEntity.convert(signature, FilenameUtils.removeExtension(projectName));
                         save(convertedSignature);
                         System.out.println("Signature loaded: " + convertedSignature.getId() + " --> Name: " + convertedSignature.getName());
@@ -64,7 +64,7 @@ public class SignatureFileStorageService implements ModelStorageService<Signatur
      * @param fileName
      * @return
      */
-    public String storeModel(DefaultDynamicSignature signature, Path location, String fileName) {
+    public String storeModel(DynamicSignature signature, Path location, String fileName) {
         try {
             Path targetLocation = location.resolve(fileName + ".xmi");
             Path targetLocationMetamodel = location.resolve(fileName + ".ecore");
@@ -78,7 +78,7 @@ public class SignatureFileStorageService implements ModelStorageService<Signatur
 
     public String storeModel(SignatureEntity signatureEntity, Path location, String fileName) {
         try {
-            DefaultDynamicSignature signature = SignatureEntity.convert(signatureEntity);
+            DynamicSignature signature = SignatureEntity.convert(signatureEntity);
             Path targetLocation = location.resolve(fileName + ".xmi");
             Path targetLocationMetamodel = location.resolve(fileName + ".ecore");
             BigraphFileModelManagement.Store.exportAsInstanceModel(signature, new FileOutputStream(targetLocation.toFile()), targetLocationMetamodel.toFile().getName());

@@ -13,7 +13,7 @@ import org.bigraphs.framework.core.exceptions.builder.TypeNotExistsException;
 import org.bigraphs.framework.core.impl.BigraphEntity;
 import org.bigraphs.framework.core.impl.pure.PureBigraph;
 import org.bigraphs.framework.core.impl.pure.PureBigraphBuilder;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicSignature;
 import org.bigraphs.framework.core.impl.signature.DynamicSignatureBuilder;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
@@ -67,26 +67,26 @@ public class Ecore2JSON {
 //        signatureBuilder.newControl().identifier(StringTypedName.of("D")).arity(FiniteOrdinal.ofInteger(3)).assign();
 //
 //
-        DefaultDynamicSignature signature = signatureBuilder.create();
+        DynamicSignature signature = signatureBuilder.create();
 
 
         //PureBigraphFactory factory = AbstractBigraphFactory.createPureBigraphFactory();
-        PureBigraphBuilder<DefaultDynamicSignature> builder = pureBuilder(signature);
+        PureBigraphBuilder<DynamicSignature> builder = pureBuilder(signature);
 
-        PureBigraphBuilder.Hierarchy r1 = builder.createRoot();
+        PureBigraphBuilder.Hierarchy r1 = builder.root();
 
-        BigraphEntity.InnerName e1 = builder.createInnerName("e1");
-        BigraphEntity.InnerName tmp = builder.createInnerName("tmp");
-        BigraphEntity.OuterName a = builder.createOuterName("a");
-        BigraphEntity.OuterName b = builder.createOuterName("b");
-        BigraphEntity.OuterName c = builder.createOuterName("c");
+        BigraphEntity.InnerName e1 = builder.createInner("e1");
+        BigraphEntity.InnerName tmp = builder.createInner("tmp");
+        BigraphEntity.OuterName a = builder.createOuter("a");
+        BigraphEntity.OuterName b = builder.createOuter("b");
+        BigraphEntity.OuterName c = builder.createOuter("c");
 
-        PureBigraphBuilder.Hierarchy b1 = r1.addSite().addChild("User").linkToInner(tmp).down().addSite();
-        PureBigraphBuilder.Hierarchy b2 = r1.addChild("PC").linkToInner(tmp).linkToOuter(a);
+        PureBigraphBuilder.Hierarchy b1 = r1.site().child("User").linkInner(tmp).down().site();
+        PureBigraphBuilder.Hierarchy b2 = r1.child("PC").linkInner(tmp).linkOuter(a);
 
-        builder.connectInnerToOuterName(e1, c);
+        builder.linkInnerToOuter(e1, c);
 
-        PureBigraph bigraph = builder.createBigraph();
+        PureBigraph bigraph = builder.create();
         return bigraph;
     }
 

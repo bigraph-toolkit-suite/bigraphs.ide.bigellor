@@ -2,16 +2,13 @@ package de.tudresden.inf.st.bigraphs.editor.bigellor.service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
-import org.bigraphs.framework.core.BigraphFileModelManagement;
 import org.bigraphs.framework.core.impl.pure.PureBigraph;
 import org.bigraphs.framework.core.impl.pure.PureBigraphBuilder;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicSignature;
+import org.bigraphs.framework.core.impl.signature.DynamicSignature;
 import org.bigraphs.framework.core.reactivesystem.ReactionRule;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.domain.*;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.ModelStorageRepository;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.NewProjectDTORepository;
-import org.bigraphs.framework.core.utils.BigraphUtil;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -24,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static org.bigraphs.framework.core.factory.BigraphFactory.*;
@@ -139,15 +135,15 @@ public class ProjectFileLocationService {
                 DomainUtils.writeProjectFile(sigFile.getAbsolutePath(), currentSignatureEntity.getName());
             }
         }
-        DefaultDynamicSignature dynamicSignature = SignatureEntity.convert(currentSignatureEntity);
+        DynamicSignature dynamicSignature = SignatureEntity.convert(currentSignatureEntity);
 
         // Bigraph
         // Create empty bigraph model and store it first
         // Save the stub bigraph model and attach it the the freshly created project
         ModelEntity modelEntity = new ModelEntity();
-        PureBigraphBuilder<DefaultDynamicSignature> builder = pureBuilder(dynamicSignature);
-        builder.createRoot().addSite();
-        PureBigraph bigraph = builder.createBigraph();
+        PureBigraphBuilder<DynamicSignature> builder = pureBuilder(dynamicSignature);
+        builder.root().site();
+        PureBigraph bigraph = builder.create();
         String filename = modelStorageService.storeModel(bigraph,
                 Paths.get(projectLocation, RESOURCES_DIR_AGENTS),
                 modelEntity.getModelStorageId() + ".xmi");
@@ -183,10 +179,10 @@ public class ProjectFileLocationService {
                 Paths.get(getProjectFolder(newProjectDTO.getProjectName()), ProjectFileLocationService.RESOURCES_DIR_AGENTS).toString(),
                 bigraphModelFilename);
 
-        DefaultDynamicSignature sig = SignatureEntity.convert(signatureEntity);
+        DynamicSignature sig = SignatureEntity.convert(signatureEntity);
         EPackage orGetBigraphMetaModel = createOrGetBigraphMetaModel(sig);
-        PureBigraphBuilder<DefaultDynamicSignature> defaultDynamicSignaturePureBigraphBuilder = PureBigraphBuilder.create(sig, orGetBigraphMetaModel, resource.getFile().getAbsolutePath());
-        PureBigraph demoBigraph = defaultDynamicSignaturePureBigraphBuilder.createBigraph();
+        PureBigraphBuilder<DynamicSignature> DynamicSignaturePureBigraphBuilder = PureBigraphBuilder.create(sig, orGetBigraphMetaModel, resource.getFile().getAbsolutePath());
+        PureBigraph demoBigraph = DynamicSignaturePureBigraphBuilder.create();
         return LoadedModelResult.create().setSignatureEntity(signatureEntity).setBigraph(demoBigraph);
     }
 
@@ -225,11 +221,11 @@ public class ProjectFileLocationService {
                 Paths.get(getProjectFolder(newProjectDTO.getProjectName()), RESOURCES_DIR_AGENTS).toString(),
                 byId.getFileName()
         );
-        DefaultDynamicSignature sig = SignatureEntity.convert(currentSignatureEntity);
+        DynamicSignature sig = SignatureEntity.convert(currentSignatureEntity);
         EPackage orGetBigraphMetaModel = createOrGetBigraphMetaModel(sig);
-        PureBigraphBuilder<DefaultDynamicSignature> defaultDynamicSignaturePureBigraphBuilder =
+        PureBigraphBuilder<DynamicSignature> DynamicSignaturePureBigraphBuilder =
                 PureBigraphBuilder.create(sig, orGetBigraphMetaModel, pathLoaded.toString());
-        PureBigraph loadedBigraph = defaultDynamicSignaturePureBigraphBuilder.createBigraph();
+        PureBigraph loadedBigraph = DynamicSignaturePureBigraphBuilder.create();
 
         return LoadedModelResult.create()
                 .setBigraph(loadedBigraph)

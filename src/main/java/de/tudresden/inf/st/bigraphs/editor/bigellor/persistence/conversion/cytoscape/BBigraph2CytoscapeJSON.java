@@ -5,7 +5,7 @@ import org.bigraphs.framework.core.Bigraph;
 import org.bigraphs.framework.core.BigraphEntityType;
 import org.bigraphs.framework.core.impl.BigraphEntity;
 import org.bigraphs.framework.core.impl.pure.PureBigraph;
-import org.bigraphs.framework.core.impl.signature.DefaultDynamicControl;
+import org.bigraphs.framework.core.impl.signature.DynamicControl;
 import de.tudresden.inf.st.bigraphs.editor.bigellor.persistence.conversion.Ecore2JSON;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,7 +87,7 @@ public class BBigraph2CytoscapeJSON extends Ecore2JSON {
                 suffixId = "r" + ((BigraphEntity.RootEntity) x).getIndex();
                 break;
             case PORT:
-                BigraphEntity.NodeEntity<DefaultDynamicControl> nodeOfPort = bigraph.getNodeOfPort(((BigraphEntity.Port) x));
+                BigraphEntity.NodeEntity<DynamicControl> nodeOfPort = bigraph.getNodeOfPort(((BigraphEntity.Port) x));
                 if (nodeOfPort != null) {
                     String tmp = createJSONIdOrGet(nodeOfPort, bigraph);
                     suffixId = "p-" + tmp + "-" + ((BigraphEntity.Port) x).getIndex();
